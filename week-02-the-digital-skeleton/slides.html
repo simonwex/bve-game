@@ -204,17 +204,33 @@
 
   <!-- 9 -->
   <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Build it together</p>
+    <h2>Now <em>fight back</em> — same three ideas.</h2>
+    <pre class="code"><span class="f">start</span>(game) {
+  game.zombies.forEach(z =&gt; z.hp = <span class="k">2</span>);   <span class="c">// a variable</span>
+}
+<span class="f">use</span>(player, game) {
+  <span class="k">const</span> z = game.<span class="f">zombieAt</span>(game.<span class="f">squareInFront</span>(player));
+  <span class="k">if</span> (z) {
+    z.hp = z.hp - <span class="k">1</span>;                     <span class="c">// change it</span>
+    <span class="k">if</span> (z.hp &lt;= <span class="k">0</span>) game.<span class="f">removeZombieAt</span>(z);  <span class="c">// an if</span>
+  }
+}</pre>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
     <p class="kick"><span class="star">★</span> Side B · Your turn</p>
     <h2>Teach the computer <em>your</em> card.</h2>
     <div class="track">
-      <div class="row"><span class="num">01</span><span class="t">Copy <code>_card-template.js</code> → rename it (e.g. <code>score.js</code>)</span></div>
+      <div class="row"><span class="num">01</span><span class="t">Copy <code>_card-template.js</code> → rename it (e.g. <code>my-card.js</code>)</span></div>
       <div class="row"><span class="num">02</span><span class="t">Fill in name / what it does / limit, and the blanks</span></div>
-      <div class="row"><span class="num">03</span><span class="t">Add <strong>one line</strong> in index.html: <code>&lt;script src="logic/score.js"&gt;&lt;/script&gt;</code></span></div>
+      <div class="row"><span class="num">03</span><span class="t">Add <strong>one line</strong> in index.html: <code>&lt;script src="logic/my-card.js"&gt;&lt;/script&gt;</code></span></div>
       <div class="row"><span class="num">04</span><span class="t">Reload Chrome → <strong>play your card</strong></span></div>
     </div>
   </section>
 
-  <!-- 10 -->
+  <!-- 11 -->
   <section class="slide">
     <p class="kick"><span class="star">★</span> Side B · Level up</p>
     <h2>Finished early?</h2>
@@ -225,7 +241,7 @@
     </div>
   </section>
 
-  <!-- 11 -->
+  <!-- 12 -->
   <section class="slide">
     <p class="kick"><span class="star">★</span> Side B complete · Next week</p>
     <h1>You wrote <span class="hl">real code.</span></h1>

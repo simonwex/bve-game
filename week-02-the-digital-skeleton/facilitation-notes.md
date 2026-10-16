@@ -29,12 +29,12 @@ Today lives entirely in **Logic**.
 
 - [ ] **Get the starter onto all 6 Macs.** Pick one: zip the `game/` folder and AirDrop it; drop
       it in a shared folder; or push to GitHub and have them clone. Each kid needs their **own copy**.
-- [ ] Open `game/index.html` in Chrome yourself and play it (turn, move, attack). Confirm it runs
-      from a double-click (no server needed).
-- [ ] Open `game/tests.html` — confirm the summary is green ("15 / 15 tests passed").
-- [ ] Have your **pile of class mechanic cards** ready and **assign one per kid** (Timer, Attack,
-      Score, Health-Pickup, Boss-HP, Double-Step…). Timer and Attack ship as working examples, so
-      if you hand those out, the kid is re-deriving a known-good card — fine for a nervous starter.
+- [ ] Open `game/index.html` in Chrome yourself and play it (turn, move, survive). Note: there's
+      **no attack yet** — that's the card we build together. Confirm it runs from a double-click.
+- [ ] Open `game/tests.html` — confirm the summary is green.
+- [ ] Have your **pile of class mechanic cards** ready and **assign one per kid** (Timer, Score,
+      Health-Pickup, Boss-HP, Double-Step…). Timer ships as a working example, so if you hand that
+      out, the kid is re-deriving a known-good card — fine for a nervous starter.
 - [ ] Projector mirrors your screen with **VS Code and Chrome side by side**.
 
 ## Room setup
@@ -47,9 +47,9 @@ Today lives entirely in **Logic**.
 
 ### 0:00–0:06 — Recap + hook: our paper game, now digital
 Open `index.html` on the projector. "Last week we designed this and played it with our bodies.
-I taught it to the computer." Play it: press **Turn** and **Move Forward** to walk the maze; press
-**Attack** next to a zombie. Then point out: *"Notice — nothing bad happens yet. You can't lose.
-Today we add the danger, and you each add a power."*
+I taught it to the computer." Play it: ← / → to turn, **Space** to move, walk the maze. Point out:
+*"You can move, and the zombies can hurt you — but there's no way to fight back yet. Today we
+build that, and you each add a power."*
 
 ### 0:06–0:14 — The map: four folders = your four stats
 Show the `game` folder in VS Code. "Remember your Week 1 stats? They're the folders."
@@ -57,10 +57,11 @@ Show the `game` folder in VS Code. "Remember your Week 1 stats? They're the fold
 - `art/` = **how it looks** · `story/` = **the why** · `sound/` = **music** (coming soon)
 
 Open `logic/`. "**One mechanic = one file** — exactly like our paper cards." Point out the
-movement cards and `health.js`, `timer.js`, `attack.js`.
+movement cards plus `health.js` and `timer.js`.
 
 ### 0:14–0:24 — Read `health.js` together (the three big ideas)
-Open `logic/health.js` on the projector. Walk the three ideas slowly:
+This is the **getting-attacked** side of combat (in a minute we'll build the **fighting-back**
+side — same three ideas). Open `logic/health.js` on the projector. Walk the three ideas slowly:
 - **A variable:** `game.health = 3;` — "a number the game remembers."
 - **Change it (math):** `game.health = game.health - 1;` — "take one away."
 - **An `if`:** `if (game.health <= 0) game.lose(...)` — "ask a yes/no question, do something if yes."
@@ -76,31 +77,51 @@ Then the **Scratch bridge** — these are "when…" blocks:
 **Everyone try it:** change `game.health = 3` to `5`, save, reload Chrome. Health changes.
 "You just programmed." (Confidence win — a one-character edit with a visible result.)
 
-### 0:24–0:34 — Build a new card together (the worked example)
-Make a brand-new card as a class so they see the full loop. Suggested: a **Score** card.
-1. In VS Code, copy `logic/_card-template.js` → rename `logic/score.js`.
-2. Fill it in together:
+### 0:24–0:36 — Build **Fight Back** together (the worked example)
+Now the class writes a card with **all three ideas** — the *fighting-back* side. Right now the
+zombies can hurt you but you can't hurt them; let's fix that.
+1. In VS Code, copy `logic/_card-template.js` → rename `logic/fight-back.js`.
+2. Fill it in together, naming each idea out loud as you type it:
    ```js
    registerCard({
-     name: "Score",
-     whatItDoes: "Earn a point for every second you survive.",
-     limit: "Points only go up.",
-     start(game)       { game.score = 0; },
-     everySecond(game) { game.score = game.score + 1; },
+     name: "Fight Back",
+     whatItDoes: "Swing at the zombie in front. Zombies take 2 hits.",
+     limit: "You stay put when you swing.",
+     key: "a",
+
+     start(game) {                                 // 1) a VARIABLE
+       game.zombies.forEach(function (z) { z.hp = 2; });
+     },
+     use(player, game) {
+       const target = game.squareInFront(player);  // the square you're facing
+       const z = game.zombieAt(target);            // a zombie there?
+       if (z) {
+         z.hp = z.hp - 1;                          // 2) CHANGE it
+         if (z.hp <= 0) game.removeZombieAt(target); // 3) an IF
+       }
+       return player;                              // you don't move
+     },
    });
    ```
-3. **Wire it:** add one line in `index.html` under "ADD YOUR CARD HERE":
-   `<script src="logic/score.js"></script>`
-4. Reload. A score appears in the HUD and climbs. "Make a file, add one line, and the game grew."
+3. **Wire it:** uncomment the Fight Back line in `index.html` (or add
+   `<script src="logic/fight-back.js"></script>`).
+4. Reload. A **Fight Back** button appears (and **A** works). Zombies now show a **2**; face one and
+   swing — it drops to **1**, swing again — it's **gone**. "You set a number, you changed it, and
+   you asked a yes/no question. That's most of programming."
 
-### 0:34–0:50 — Your turn: each kid builds their card
+*Teaching beats:* `start` is the **variable** (every zombie gets `hp = 2`). Inside `use`,
+`z.hp = z.hp - 1` is **changing** it, and `if (z.hp <= 0)` is the **if**. Same shape as the Health
+card they just read — one side gets attacked, the other fights back.
+
+### 0:36–0:50 — Your turn: each kid builds their card
 Hand each kid their assigned mechanic. Same four steps: **copy the template → rename → fill the
 blanks → add one `<script>` line → reload and playtest.** Circulate. Most cards need only `start`
 plus one of the other hooks. Keep the paper card next to the Mac — name / what it does / limit map
 straight onto the file.
 
 Common helpers to point them to (all on `game`): `game.health`, `game.timeLeft`, `game.score`,
-`game.lose("…")`, `game.win("…")`, `game.removeZombieAt(game.squareInFront(player))`.
+`game.lose("…")`, `game.win("…")`, `game.squareInFront(player)`, `game.zombieAt(pos)`,
+`game.removeZombieAt(pos)`.
 
 ### 0:50–0:57 — Show & tell + run the tests
 Demo 2–3 kids' cards on the projector. Then open `tests.html`: "This checks the game still works —

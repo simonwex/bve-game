@@ -46,7 +46,13 @@ A few helpers on `game` the fancier cards use: `game.player`, `game.zombies`,
 4. Reload the page — your card is live.
 
 The cards wired in now: `move-forward`, `turn-left`, `turn-right` (movement),
-`reach-the-exit` (the win rule), `health`, `timer`, `attack`.
+`reach-the-exit` (the win rule), `health`, `timer`. (No attack by default.)
+
+**`fight-back.js`** is the attack card the class builds together — it gives zombies health
+(`start`), then on `use` takes a hit off (`change`) and removes them at 0 (`if`): variable →
+change → if, all in one card. It's shipped but left commented in `index.html` so the class wires
+it live. **`attack.js`** is a simpler one-hit alternative (it leans on the engine's strike system,
+which the optional combat cards below also use).
 
 ## Optional mechanics menu (off by default)
 Each is a full card in this folder. Turn one on by uncommenting its line in

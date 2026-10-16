@@ -53,7 +53,7 @@
   <script src="logic/reach-the-exit.js"></script>
   <script src="logic/health.js"></script>
   <script src="logic/timer.js"></script>
-  <script src="logic/attack.js"></script>
+  <script src="logic/fight-back.js"></script>
 
   <!-- The tests -->
   <script>
@@ -78,7 +78,7 @@
       var G = GAME;
 
       // --- setup is correct ---
-      var baseCards = ["Move Forward","Turn Left","Turn Right","Reach the Exit","Health","Timer","Attack"];
+      var baseCards = ["Move Forward","Turn Left","Turn Right","Reach the Exit","Health","Timer","Fight Back"];
       check("all base cards registered", baseCards.every(function (n) { return byName(n); }));
       check("3 art entries registered", Object.keys(ART).length === 3);
       check("player starts on GAME.start", player.x === G.start.x && player.y === G.start.y);
@@ -114,13 +114,16 @@
       check("Move Forward steps onto the zombie's square", player.x === z.x && player.y === z.y);
       check("stepping on a zombie costs 1 health", game.health === hp0 - 1);
 
-      // --- attack removes the zombie in front ---
+      // --- Fight Back: a zombie takes two hits ---
       over = false;
       player = { x: 0, y: G.rows - 1, facing: { dx: 0, dy: -1 } };   // bottom-left, facing up
       game.player = player;
-      zombies.push({ x: 0, y: G.rows - 2, hp: 1 });
-      doAction(byName("Attack"));
-      check("Attack removes the zombie in front", !game.isZombie({ x: 0, y: G.rows - 2 }));
+      zombies.push({ x: 0, y: G.rows - 2, hp: 2 });
+      var tz = { x: 0, y: G.rows - 2 };
+      doAction(byName("Fight Back"));
+      check("Fight Back: first hit leaves the zombie (hp 2→1)", game.zombieAt(tz) && game.zombieAt(tz).hp === 1);
+      doAction(byName("Fight Back"));
+      check("Fight Back: second hit removes it", !game.isZombie(tz));
 
       // --- wall: can't walk off the board ---
       over = false;
