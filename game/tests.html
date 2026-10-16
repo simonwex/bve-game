@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zombie Maze — Tests</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --cream:#F4EDE0; --sheet:#fff; --ink:#2A2438; --peri:#8B7EC8; --green:#2f8f4e; --red:#c0392b;
+      --mono:"JetBrains Mono",ui-monospace,"Courier New",monospace; }
+    body{ margin:0; background:var(--cream); color:var(--ink); font-family:var(--mono);
+      padding:28px 16px 48px; display:flex; justify-content:center; }
+    .wrap{ width:min(640px,100%); }
+    h1{ font-size:1.5rem; margin:0 0 4px; }
+    .sub{ color:#5A5170; margin:0 0 18px; font-size:.85rem; }
+    #summary{ font-weight:700; font-size:1.2rem; border:2px solid var(--ink); border-radius:12px;
+      padding:12px 16px; margin-bottom:16px; box-shadow:5px 5px 0 var(--peri); background:var(--sheet); }
+    #summary.ok{ color:var(--green); } #summary.bad{ color:var(--red); }
+    ul{ list-style:none; margin:0; padding:0; display:grid; gap:6px; }
+    li{ background:var(--sheet); border:1.5px solid var(--ink); border-radius:8px; padding:8px 12px;
+      font-size:.85rem; display:flex; gap:10px; align-items:baseline; }
+    .tag{ font-weight:700; } .pass .tag{ color:var(--green); } .fail .tag{ color:var(--red); }
+    .fail{ outline:2px solid var(--red); }
+    /* the engine needs these nodes to exist; we don't need to see them */
+    #stage{ position:absolute; left:-9999px; top:-9999px; width:1px; height:1px; overflow:hidden; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Zombie Maze — Tests</h1>
+    <p class="sub">Open this file in your browser to check the game engine still works. Green = good.</p>
+    <div id="summary">Running…</div>
+    <ul id="results"></ul>
+  </div>
+
+  <!-- The real game needs these elements; kept off-screen for the test. -->
+  <div id="stage">
+    <span id="title"></span><span id="hud"></span>
+    <div id="board"></div><div id="cards"></div><div id="loaded"></div>
+    <div id="overlay" hidden></div>
+  </div>
+
+  <!-- Load the REAL game, exactly like index.html does -->
+  <script src="game.config.js"></script>
+  <script src="engine.js"></script>
+  <script src="art/player.js"></script>
+  <script src="art/zombie.js"></script>
+  <script src="art/boss.js"></script>
+  <script src="logic/move-forward.js"></script>
+  <script src="logic/turn-left.js"></script>
+  <script src="logic/turn-right.js"></script>
+  <script src="logic/reach-the-exit.js"></script>
+  <script src="logic/health.js"></script>
+  <script src="logic/timer.js"></script>
+  <script src="logic/attack.js"></script>
+
+  <!-- The tests -->
+  <script>
+    window.addEventListener("load", function () {
+      // init() already ran on DOMContentLoaded. Stop its 1-second clock so tests are stable.
+      if (typeof clock !== "undefined" && clock) clearInterval(clock);
+
+      var results = document.getElementById("results");
+      var pass = 0, fail = 0;
+      function check(name, cond) {
+        cond ? pass++ : fail++;
+        var li = document.createElement("li");
+        li.className = cond ? "pass" : "fail";
+        li.innerHTML = '<span class="tag">' + (cond ? "PASS" : "FAIL") + "</span><span>" + name + "</span>";
+        results.appendChild(li);
+      }
+      var overlay = document.getElementById("overlay");
+      var byName = function (n) { return CARDS.find(function (c) { return c.name === n; }); };
+
+      // These checks read whatever is in game.config.js, so editing the board
+      // (grid size, start, health, timer) won't make them fail.
+      var G = GAME;
+
+      // --- setup is correct ---
+      var baseCards = ["Move Forward","Turn Left","Turn Right","Reach the Exit","Health","Timer","Attack"];
+      check("all base cards registered", baseCards.every(function (n) { return byName(n); }));
+      check("3 art entries registered", Object.keys(ART).length === 3);
+      check("player starts on GAME.start", player.x === G.start.x && player.y === G.start.y);
+      check("player faces GAME.startFacing", player.facing.dx === G.startFacing.dx && player.facing.dy === G.startFacing.dy);
+      check("Health card gives a starting health", typeof game.health === "number" && game.health > 0);
+      check("Timer card puts time on the clock", typeof game.timeLeft === "number" && game.timeLeft > 0);
+
+      // --- HUD now comes from the cards (hud hook) ---
+      check("Health draws hearts via its hud()", byName("Health").hud(game) === "❤️".repeat(game.health));
+      check("Timer draws the clock via its hud()", byName("Timer").hud(game).indexOf("⏱") === 0);
+      check("the HUD shows the hearts", document.getElementById("hud").textContent.indexOf("❤️") !== -1);
+
+      // --- keyboard keys live on the cards (key field) ---
+      check("Move Forward owns the ↑ key", byName("Move Forward").key === "ArrowUp");
+
+      // --- turning (relative to however the player faces now) ---
+      var f0 = player.facing;
+      doAction(byName("Turn Right"));
+      var r = game.rotateRight(f0);
+      check("Turn Right rotates clockwise", player.facing.dx === r.dx && player.facing.dy === r.dy);
+      doAction(byName("Turn Left"));
+      check("Turn Left undoes it", player.facing.dx === f0.dx && player.facing.dy === f0.dy);
+
+      // --- moving onto a zombie costs health ---
+      var z = G.zombies[0];
+      var below = (z.y + 1 < G.rows);
+      over = false;
+      player = below ? { x: z.x, y: z.y + 1, facing: { dx: 0, dy: -1 } }
+                     : { x: z.x, y: z.y - 1, facing: { dx: 0, dy: 1 } };
+      game.player = player;
+      var hp0 = game.health;
+      doAction(byName("Move Forward"));
+      check("Move Forward steps onto the zombie's square", player.x === z.x && player.y === z.y);
+      check("stepping on a zombie costs 1 health", game.health === hp0 - 1);
+
+      // --- attack removes the zombie in front ---
+      over = false;
+      player = { x: 0, y: G.rows - 1, facing: { dx: 0, dy: -1 } };   // bottom-left, facing up
+      game.player = player;
+      zombies.push({ x: 0, y: G.rows - 2, hp: 1 });
+      doAction(byName("Attack"));
+      check("Attack removes the zombie in front", !game.isZombie({ x: 0, y: G.rows - 2 }));
+
+      // --- wall: can't walk off the board ---
+      over = false;
+      player = { x: G.cols - 1, y: 0, facing: { dx: 0, dy: -1 } };   // top edge, facing up
+      game.player = player;
+      doAction(byName("Move Forward"));
+      check("wall: can't walk off the edge", player.x === G.cols - 1 && player.y === 0 && over === false);
+
+      // --- win: now handled by the Reach the Exit card ---
+      over = false; overlay.hidden = true;
+      player = (G.goal.y + 1 < G.rows)
+        ? { x: G.goal.x, y: G.goal.y + 1, facing: { dx: 0, dy: -1 } }
+        : { x: G.goal.x + 1, y: G.goal.y, facing: { dx: -1, dy: 0 } };
+      game.player = player;
+      doAction(byName("Move Forward"));           // steps onto the goal
+      check("reaching the green exit wins", over === true && overlay.className === "win");
+
+      // --- lose by timer ---
+      over = false; overlay.hidden = true;
+      game.timeLeft = 1;
+      CARDS.forEach(function (c) { if (c.everySecond) c.everySecond(game); });
+      check("timer hitting 0 is game over", over === true && overlay.className === "lose");
+
+      // --- lose by health ---
+      over = false; overlay.hidden = true;
+      game.health = 1;
+      CARDS.forEach(function (c) { if (c.onZombieHit) c.onZombieHit(game); });
+      check("health hitting 0 is game over", over === true && overlay.className === "lose");
+
+      // --- summary ---
+      var s = document.getElementById("summary");
+      s.textContent = pass + " / " + (pass + fail) + " tests passed";
+      s.className = fail === 0 ? "ok" : "bad";
+    });
+  </script>
+</body>
+</html>

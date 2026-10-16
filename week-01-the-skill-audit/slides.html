@@ -1,0 +1,434 @@
+<title>Player One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,600,100,1;0,9..144,800,100,1;0,9..144,900,100,1;1,9..144,500,100,1;1,9..144,700,100,1;1,9..144,900,100,1&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  /* "Trapper Keeper × Mixtape" — the locked simonwex.com identity.
+     Single committed cream theme (projected in a classroom). Periwinkle leads;
+     compliments rationed; solid offset shadows, never blur. One slide shown at a time. */
+  :root{
+    --cream:#F4EDE0; --cream-soft:#FAF5EB; --sheet:#FFFFFF;
+    --ink:#2A2438; --ink-soft:#5A5170;
+    --periwinkle:#8B7EC8; --periwinkle-deep:#6E61B0; --lavender:#E9D9F0;
+    --hot-pink:#FF5A8A; --tangerine:#FF8C42; --aqua:#A8E8DC;
+    --cobalt:#3D5BE8; --sun:#FFC73D;
+    color-scheme:light;
+    --serif:"Fraunces", Georgia, "Times New Roman", serif;
+    --sans:"DM Sans", system-ui, -apple-system, sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, "Courier New", monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--cream);color:var(--ink);
+    font-family:var(--sans);font-size:clamp(15px,1.5vw,18px);line-height:1.55;
+    overflow:hidden;
+  }
+  /* grid-paper texture — faint periwinkle 28px grid */
+  .grid-paper{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.07;
+    background-image:
+      linear-gradient(var(--periwinkle) 1px, transparent 1px),
+      linear-gradient(90deg, var(--periwinkle) 1px, transparent 1px);
+    background-size:28px 28px;background-position:-1px -1px;}
+
+  .stage{position:fixed;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;
+    padding:clamp(20px,4vw,60px);
+    padding-top:calc(clamp(20px,4vw,60px) + env(safe-area-inset-top,0px));
+    padding-bottom:calc(clamp(20px,4vw,60px) + 42px + env(safe-area-inset-bottom,0px));}
+  .slide{width:min(1060px,100%);max-height:100%;overflow:auto;padding:0 10px 10px 0}
+  .slide[hidden]{display:none!important}
+
+  /* kicker */
+  .kick{font-family:var(--mono);font-weight:500;text-transform:uppercase;
+    letter-spacing:.14em;color:var(--periwinkle-deep);
+    font-size:clamp(11px,1.15vw,14px);margin:0 0 1rem}
+  .kick .star{color:var(--tangerine)}
+
+  h1{font-family:var(--serif);font-weight:900;line-height:.94;letter-spacing:-.025em;
+    text-wrap:balance;margin:0 0 1.1rem;font-size:clamp(2.6rem,7.6vw,5.4rem)}
+  h2{font-family:var(--serif);font-weight:800;line-height:1.0;letter-spacing:-.02em;
+    text-wrap:balance;margin:0 0 1rem;font-size:clamp(2rem,4.8vw,3.4rem)}
+  h2 em,h1 em{font-style:italic;color:var(--periwinkle)}
+  p{margin:0 0 1rem;max-width:60ch}
+  .lead{font-family:var(--sans);font-size:clamp(1.05rem,2vw,1.45rem);color:var(--ink)}
+  .soft{color:var(--ink-soft)}
+  .hl{background:linear-gradient(transparent 62%, var(--sun) 62%);padding:0 .1em}
+  strong{font-weight:700}
+
+  /* title slide */
+  .title{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(1.5rem,4vw,3rem);align-items:center}
+  .title .intro p{max-width:30ch}
+  .cassette{display:block;width:100%;height:auto;filter:drop-shadow(8px 8px 0 var(--ink));
+    transform:rotate(-1.5deg)}
+
+  /* offset-shadow cards */
+  .cards{display:grid;gap:1.1rem}
+  .cards.c4{grid-template-columns:repeat(2,1fr);gap:1.4rem 1.2rem}
+  .card{background:var(--sheet);border:2px solid var(--ink);border-radius:18px;
+    padding:1.05rem 1.15rem;box-shadow:7px 7px 0 var(--periwinkle)}
+  .card h3{font-family:var(--serif);font-weight:800;font-style:italic;margin:0 0 .3rem;
+    font-size:clamp(1.25rem,2.2vw,1.7rem);line-height:1.05}
+  .card p{margin:0;color:var(--ink-soft);max-width:none;font-size:clamp(.95rem,1.6vw,1.1rem)}
+  .card.logic h3{color:var(--cobalt)} .card.art h3{color:var(--hot-pink)}
+  .card.story h3{color:var(--tangerine)} .card.sound h3{color:var(--periwinkle-deep)}
+
+  /* mechanic index card */
+  .mcard{background:var(--cream-soft);border:2px solid var(--ink);border-radius:18px;
+    padding:1.1rem 1.25rem;box-shadow:7px 7px 0 var(--periwinkle);max-width:none}
+  .mcard .lab{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--periwinkle-deep);display:block;margin-top:.8rem}
+  .mcard .lab:first-child{margin-top:0}
+  .mcard .big{font-family:var(--serif);font-weight:800;font-style:italic;
+    font-size:clamp(1.3rem,2.4vw,1.9rem);color:var(--ink)}
+  .mcard .val{font-size:clamp(1rem,1.7vw,1.2rem)}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;align-items:start}
+
+  /* monospace tracklist */
+  .track{font-family:var(--mono)}
+  .track .row{display:grid;grid-template-columns:auto 1fr auto;gap:.8rem 1rem;align-items:baseline;
+    padding:.72rem .2rem;border-bottom:1px dashed rgba(42,36,56,.22)}
+  .track .row:last-child{border-bottom:0}
+  .track .num{color:var(--cobalt);font-weight:700;font-size:clamp(1rem,1.7vw,1.25rem)}
+  .track .t{font-family:var(--sans);font-weight:500;color:var(--ink);min-width:0;
+    font-size:clamp(1rem,1.8vw,1.3rem)}
+  .track .t em{font-family:var(--serif);font-style:italic;color:var(--ink-soft);
+    display:block;font-weight:500;font-size:clamp(.9rem,1.4vw,1.05rem)}
+
+  /* sticker chips / status tags */
+  .chip{display:inline-block;font-family:var(--mono);font-weight:500;font-size:clamp(11px,1.3vw,14px);
+    border:2px solid var(--ink);border-radius:999px;padding:.32em .8em;white-space:nowrap;
+    background:var(--aqua);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+  .chip.pink{background:var(--hot-pink);color:#fff} .chip.sun{background:var(--sun)}
+  .chip.tang{background:var(--tangerine)} .chip.peri{background:var(--lavender)}
+  .chip.ghost{background:transparent;border-style:dashed;box-shadow:none}
+
+  .chips{display:flex;flex-wrap:wrap;gap:.7rem;margin:.3rem 0 1.1rem}
+
+  /* tape strip (the one rotated element on a slide that uses it) */
+  .tape{display:inline-block;background:rgba(255,199,61,.78);border:1px solid rgba(42,36,56,.25);
+    font-family:var(--mono);font-size:clamp(11px,1.3vw,14px);letter-spacing:.06em;
+    padding:.35em .8em;transform:rotate(-3deg);color:var(--ink)}
+
+  /* chrome */
+  .bar{position:fixed;top:0;left:0;height:4px;background:var(--periwinkle);z-index:60;width:0;
+    transition:width .3s ease}
+  .hud{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;align-items:center;
+    justify-content:space-between;gap:1rem;background:var(--cream-soft);border-top:2px solid var(--ink);
+    padding:.5rem clamp(14px,4vw,28px);padding-bottom:calc(.5rem + env(safe-area-inset-bottom,0px));
+    font-family:var(--mono);font-size:13px;color:var(--ink-soft)}
+  .hud .hint{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+  kbd{border:1.5px solid var(--ink);background:var(--sheet);border-radius:6px;padding:.05em .45em;
+    font-family:var(--mono);font-size:12px;color:var(--ink)}
+  .count{color:var(--ink)} .count b{color:var(--periwinkle-deep)}
+  .btns{display:flex;gap:.4rem}
+  button{font-family:var(--mono);font-size:13px;color:var(--ink);background:var(--sheet);
+    border:1.5px solid var(--ink);border-radius:8px;padding:.35em .7em;cursor:pointer}
+  button:hover{background:var(--lavender)}
+  button:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+
+  .zone{position:fixed;top:0;bottom:46px;width:30%;z-index:30;cursor:pointer;background:transparent}
+  .zone.prev{left:0} .zone.next{right:0;width:42%}
+
+  @media (max-width:640px){
+    .title{grid-template-columns:1fr;gap:1.2rem}
+    .title .cassette-wrap{order:-1;max-width:70%;margin-inline:auto}
+    .cards.c4{grid-template-columns:1fr}
+    .split{grid-template-columns:1fr}
+    .zone{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="grid-paper" aria-hidden="true"></div>
+<div class="bar" id="bar"></div>
+<div class="zone prev" id="zprev" aria-hidden="true"></div>
+<div class="zone next" id="znext" aria-hidden="true"></div>
+
+<main class="stage">
+
+  <!-- 1 · TITLE -->
+  <section class="slide title">
+    <div class="intro">
+      <p class="kick"><span class="star">★</span> Side A · Week 1 of 8</p>
+      <h1>Player<br>One</h1>
+      <p class="lead soft">Today: <span class="hl">zero</span> computers. All paper. The best game makers in the world start right here.</p>
+    </div>
+    <div class="cassette-wrap">
+      <svg class="cassette" viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg" aria-label="Cassette: Side A, Player One">
+        <defs>
+          <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#A698D8"/><stop offset="0.12" stop-color="#9285CF"/>
+            <stop offset="0.5" stop-color="#8B7EC8"/><stop offset="0.88" stop-color="#776AB4"/>
+            <stop offset="1" stop-color="#5F5391"/>
+          </linearGradient>
+          <linearGradient id="bodyHi" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="rgba(255,255,255,0.35)"/><stop offset="0.4" stop-color="rgba(255,255,255,0)"/>
+          </linearGradient>
+          <linearGradient id="winBg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#0F0C18"/><stop offset="1" stop-color="#221E2E"/>
+          </linearGradient>
+          <radialGradient id="tape" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0" stop-color="#3a2317"/><stop offset="0.55" stop-color="#4d2f1f"/>
+            <stop offset="0.78" stop-color="#3a2317"/><stop offset="0.94" stop-color="#1f1208"/>
+            <stop offset="1" stop-color="#120a04"/>
+          </radialGradient>
+          <linearGradient id="labelPaper" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#FFFCF5"/><stop offset="1" stop-color="#F2EBDE"/>
+          </linearGradient>
+          <pattern id="squiggle" x="0" y="0" width="42" height="42" patternUnits="userSpaceOnUse">
+            <rect fill="#A8E8DC" width="42" height="42"/>
+            <path d="M3 10 Q 8 4, 13 10 T 23 10 T 33 10 T 42 10" stroke="#3D5BE8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M3 26 Q 8 20, 13 26 T 23 26 T 33 26 T 42 26" stroke="#3D5BE8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M3 38 Q 8 32, 13 38 T 23 38 T 33 38 T 42 38" stroke="#3D5BE8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </pattern>
+        </defs>
+        <rect x="6" y="6" width="548" height="348" rx="14" fill="url(#body)" stroke="#2A2438" stroke-width="2.5"/>
+        <rect x="6" y="6" width="548" height="60" rx="14" fill="url(#bodyHi)"/>
+        <rect x="32" y="4" width="26" height="14" fill="#2A2438" rx="2"/>
+        <rect x="502" y="4" width="26" height="14" fill="#2A2438" rx="2"/>
+        <rect x="270" y="4" width="20" height="10" fill="#2A2438" rx="1"/>
+        <rect x="26" y="32" width="508" height="180" rx="6" fill="#7A6DB8" stroke="#2A2438" stroke-width="1.5"/>
+        <rect x="34" y="40" width="492" height="164" rx="3" fill="url(#labelPaper)" stroke="#2A2438" stroke-width="1"/>
+        <rect x="48" y="56" width="160" height="132" fill="url(#squiggle)"/>
+        <rect x="48" y="56" width="160" height="132" fill="none" stroke="#FF5A8A" stroke-width="4"/>
+        <circle cx="478" cy="72" r="24" fill="#A8E8DC" stroke="#2A2438" stroke-width="2"/>
+        <ellipse cx="470" cy="64" rx="8" ry="5" fill="#C8F0E5" opacity="0.7"/>
+        <circle cx="488" cy="62" r="8" fill="#FF5A8A" stroke="#B83968" stroke-width="0.5"/>
+        <text x="240" y="92" font-family="Fraunces, serif" font-style="italic" font-weight="700" font-size="34" fill="#2A2438">side a</text>
+        <text x="240" y="124" font-family="Fraunces, serif" font-style="italic" font-weight="500" font-size="20" fill="#6E61B0">player one.</text>
+        <text x="240" y="158" font-family="JetBrains Mono, monospace" font-weight="500" font-size="12" fill="#5A5170" letter-spacing="0.1em">★ WEEK 1 OF 8</text>
+        <text x="240" y="180" font-family="JetBrains Mono, monospace" font-weight="500" font-size="11" fill="#3D5BE8" letter-spacing="0.06em">paper · design · playtest</text>
+        <text x="488" y="194" font-family="Fraunces, serif" font-style="italic" font-weight="900" font-size="56" fill="#FF8C42" text-anchor="end">A</text>
+        <rect x="26" y="226" width="508" height="98" rx="4" fill="url(#winBg)" stroke="#2A2438" stroke-width="1.5"/>
+        <rect x="26" y="226" width="508" height="14" rx="4" fill="rgba(0,0,0,0.5)"/>
+        <rect x="140" y="312" width="280" height="5" fill="#4a2d1e"/>
+        <rect x="140" y="316" width="280" height="2" fill="#1f1208"/>
+        <g transform="translate(170, 275)">
+          <circle r="40" fill="url(#tape)" stroke="#120a04" stroke-width="1.5"/>
+          <circle r="32" fill="none" stroke="#2a1a10" stroke-width="0.5" opacity="0.6"/>
+          <circle r="16" fill="#FAF5EB" stroke="#2A2438" stroke-width="1.5"/>
+          <g fill="#2A2438"><rect x="-2" y="-15" width="4" height="6"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(60)"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(120)"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(180)"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(240)"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(300)"/></g>
+          <circle r="3" fill="#2A2438"/>
+        </g>
+        <g transform="translate(390, 275)">
+          <circle r="40" fill="url(#tape)" stroke="#120a04" stroke-width="1.5"/>
+          <circle r="32" fill="none" stroke="#2a1a10" stroke-width="0.5" opacity="0.6"/>
+          <circle r="16" fill="#FAF5EB" stroke="#2A2438" stroke-width="1.5"/>
+          <g fill="#2A2438"><rect x="-2" y="-15" width="4" height="6"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(60)"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(120)"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(180)"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(240)"/>
+            <rect x="-2" y="-15" width="4" height="6" transform="rotate(300)"/></g>
+          <circle r="3" fill="#2A2438"/>
+        </g>
+        <g fill="#1A1722"><circle cx="20" cy="20" r="3.5"/><circle cx="540" cy="20" r="3.5"/>
+          <circle cx="20" cy="340" r="3.5"/><circle cx="540" cy="340" r="3.5"/><circle cx="280" cy="275" r="3.5"/></g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 2 · IS THIS A GAME -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · Warm-up</p>
+    <h2>Is this a <em>game</em>?</h2>
+    <p class="lead soft">Thumbs up or thumbs down — then tell us why.</p>
+    <div class="track" style="margin-top:.4rem">
+      <div class="row"><span class="num">01</span><span class="t">A jigsaw puzzle</span><span class="chip ghost">you decide</span></div>
+      <div class="row"><span class="num">02</span><span class="t">Tic-tac-toe</span><span class="chip ghost">you decide</span></div>
+      <div class="row"><span class="num">03</span><span class="t">A superhero movie</span><span class="chip ghost">you decide</span></div>
+      <div class="row"><span class="num">04</span><span class="t">Playground tag</span><span class="chip ghost">you decide</span></div>
+      <div class="row"><span class="num">05</span><span class="t">A slot machine</span><span class="chip ghost">you decide</span></div>
+    </div>
+  </section>
+
+  <!-- 3 · DEFINITION -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · The big idea</p>
+    <h1>A <span class="hl">game</span> <em>=</em><br>goal + rules<br>+ choices<br>+ a player.</h1>
+    <p class="lead soft">Not graphics. Not code. This one stays on the board all eight weeks.</p>
+  </section>
+
+  <!-- 4 · DESIGNER NOT CODER -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · How this class works</p>
+    <h1>You're a <span class="hl">designer</span>,<br>not a coder.</h1>
+    <p class="lead">Code is just <strong>one of our tools</strong>. First we design the fun.</p>
+    <p class="lead soft">The best game makers plan on <em>paper</em> first — so that's where we start.</p>
+  </section>
+
+  <!-- 5 · STAT SHEET -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · Player stat sheet</p>
+    <h2>What kind of designer are <em>you</em>?</h2>
+    <div class="cards c4">
+      <div class="card logic"><h3>Logic</h3><p>Rules, systems, puzzles — how things work.</p></div>
+      <div class="card art"><h3>Art</h3><p>The look, the color, the feel.</p></div>
+      <div class="card story"><h3>Story</h3><p>Characters, world — why we care.</p></div>
+      <div class="card sound"><h3>Sound</h3><p>Music, effects, mood.</p></div>
+    </div>
+    <div class="chips" style="margin-top:1.1rem">
+      <span class="chip sun">10 points</span>
+      <span class="chip">spend them all</span>
+      <span class="chip peri">max 5 in one stat</span>
+    </div>
+  </section>
+
+  <!-- 6 · PERSONA -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · Your designer persona</p>
+    <h2>Name your <em>persona</em>.</h2>
+    <p class="lead soft">From your highest stat — or invent your own.</p>
+    <div class="track" style="margin-top:.3rem">
+      <div class="row"><span class="num">01</span><span class="t">The Architect<em>high logic — loves how things work</em></span><span class="chip">logic</span></div>
+      <div class="row"><span class="num">02</span><span class="t">The Visionary<em>high art — leads with the look</em></span><span class="chip pink">art</span></div>
+      <div class="row"><span class="num">03</span><span class="t">The Worldbuilder<em>high story — builds the world</em></span><span class="chip tang">story</span></div>
+      <div class="row"><span class="num">04</span><span class="t">The Composer<em>high sound — sets the mood</em></span><span class="chip peri">sound</span></div>
+    </div>
+    <p class="lead" style="margin-top:1rem">Finish the line: <strong>“My games will always have great ______.”</strong></p>
+  </section>
+
+  <!-- 7 · FOUR SYSTEMS -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · Under the hood</p>
+    <h2>Every game is built from the same <em>four parts</em>.</h2>
+    <p class="lead soft">Take a game you know — like Minecraft:</p>
+    <div class="cards c4">
+      <div class="card logic"><h3>Logic</h3><p>Gravity, mobs, crafting recipes.</p></div>
+      <div class="card art"><h3>Art</h3><p>The blocks, the whole look.</p></div>
+      <div class="card story"><h3>Story</h3><p>Why you're here, the world.</p></div>
+      <div class="card sound"><h3>Sound</h3><p>The music, the hit, the cave noises.</p></div>
+    </div>
+  </section>
+
+  <!-- 8 · MECHANIC -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · The building block</p>
+    <h1>A <span class="hl">mechanic</span> <em>=</em><br>a verb + a limit.</h1>
+    <p class="lead soft">“Jump.” “Mine a block.” “Dash — but not through walls.”</p>
+  </section>
+
+  <!-- 9 · MECHANIC CARD -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · The challenge</p>
+    <h2>Build a <em>Mechanic Card</em>.</h2>
+    <div class="split" style="margin-top:.5rem">
+      <div class="mcard">
+        <span class="lab">Name</span><span class="big">your card →</span>
+        <span class="lab">What it does</span><span class="val">one thing the player can do</span>
+        <span class="lab">A limit or cost</span><span class="val">what keeps it from being overpowered</span>
+      </div>
+      <div class="track" style="align-self:center">
+        <div class="row"><span class="num">A</span><span class="t">Hop<em>move 1 square any direction — incl. diagonal · one per turn</em></span></div>
+        <div class="row"><span class="num">B</span><span class="t">Dash<em>move 3 squares straight · can't stop on a hazard</em></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · PLAYTEST -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · Playtest on the grid</p>
+    <h2>Does it work? Is it <em>fun</em>?</h2>
+    <div class="track" style="margin-top:.3rem">
+      <div class="row"><span class="num">01</span><span class="t">Token on <strong>START</strong> — reach the goal using only your mechanic.</span></div>
+      <div class="row"><span class="num">02</span><span class="t">Too easy? Impossible? <em>That's not failing — that's learning.</em></span></div>
+      <div class="row"><span class="num">03</span><span class="t">Change <strong>one</strong> thing on your card. Test again.</span></div>
+    </div>
+    <p class="lead" style="margin-top:1rem"><span class="tape">test → learn → change one thing → repeat</span></p>
+  </section>
+
+  <!-- 11 · SIDE-QUESTS -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · Side-quests</p>
+    <h2>Finished early? <em>Level up.</em></h2>
+    <div class="track" style="margin-top:.3rem">
+      <div class="row"><span class="num">01</span><span class="t">Teammate Persona<em>design the designer you'd want on your team</em></span><span class="chip sun">bonus</span></div>
+      <div class="row"><span class="num">02</span><span class="t">Momentum<em>after you move, you must keep moving 1 more square</em></span><span class="chip tang">harder</span></div>
+      <div class="row"><span class="num">03</span><span class="t">Combo<em>a second card + a rule for when each one is allowed</em></span><span class="chip peri">system</span></div>
+      <div class="row"><span class="num">04</span><span class="t">Evil Designer<em>place hazards that make an easy mechanic hard — but fair</em></span><span class="chip pink">boss</span></div>
+    </div>
+  </section>
+
+  <!-- 12 · DESIGNER'S LOG -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side A · The designer's log</p>
+    <h2>Everything you make lives <em>here</em>.</h2>
+    <div class="mcard" style="margin-top:.5rem">
+      <span class="lab">Into the folder today</span>
+      <span class="big">your stat sheet + your mechanic card</span>
+      <p class="soft" style="margin:.6rem 0 0">In Week 8 you'll show this folder next to your finished game — the whole story of how it went from paper to playable.</p>
+    </div>
+  </section>
+
+  <!-- 13 · WRAP -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Next week</p>
+    <h1>You designed <em>and</em> tested a game —<br><span class="hl">zero</span> code.</h1>
+    <p class="lead soft">Week 2: take a mechanic like yours and map the story around it — <em>Start → Conflict → Victory.</em></p>
+  </section>
+
+</main>
+
+<div class="hud">
+  <div class="hint"><kbd>←</kbd><kbd>→</kbd><span>flip &nbsp;·&nbsp;</span><kbd>F</kbd><span>fullscreen</span></div>
+  <div class="count">track <b id="cur">1</b> / <span id="tot">13</span></div>
+  <div class="btns">
+    <button id="prev" aria-label="Previous slide">‹ prev</button>
+    <button id="next" aria-label="Next slide">next ›</button>
+    <button id="full" aria-label="Toggle fullscreen">⤢</button>
+  </div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const bar = document.getElementById('bar');
+  const curEl = document.getElementById('cur');
+  document.getElementById('tot').textContent = slides.length;
+  let i = 0;
+
+  const fromHash = () => {
+    const n = parseInt((location.hash||'').replace('#',''),10);
+    return (Number.isInteger(n) && n>=1 && n<=slides.length) ? n-1 : 0;
+  };
+  i = fromHash();
+
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach((s,idx)=> s.hidden = idx!==i);
+    bar.style.width = ((i+1)/slides.length*100)+'%';
+    curEl.textContent = i+1;
+    try{ history.replaceState(null,'','#'+(i+1)); }catch(e){}
+    const st = document.querySelector('.stage'); if(st) st.scrollTop = 0;
+  }
+  const nextS = ()=>show(i+1);
+  const prevS = ()=>show(i-1);
+
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();nextS();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prevS();}
+    else if(e.key==='Home'){e.preventDefault();show(0);}
+    else if(e.key==='End'){e.preventDefault();show(slides.length-1);}
+    else if(e.key==='f'||e.key==='F'){e.preventDefault();toggleFull();}
+  });
+
+  document.getElementById('next').addEventListener('click', nextS);
+  document.getElementById('prev').addEventListener('click', prevS);
+  document.getElementById('znext').addEventListener('click', nextS);
+  document.getElementById('zprev').addEventListener('click', prevS);
+
+  function toggleFull(){
+    try{
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen?.().catch(()=>{}); }
+      else{ document.exitFullscreen?.().catch(()=>{}); }
+    }catch(e){}
+  }
+  document.getElementById('full').addEventListener('click', toggleFull);
+
+  window.addEventListener('hashchange', ()=>show(fromHash()));
+  show(i);
+</script>

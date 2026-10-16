@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zombie Maze</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1 id="title">Zombie Maze</h1>
+      <div id="hud"></div>
+    </header>
+
+    <div id="board"></div>
+    <div id="cards" class="cardbar"></div>
+    <div id="controls" class="controls"></div>
+    <div id="loaded" class="loaded"></div>
+  </div>
+
+  <div id="overlay" hidden></div>
+
+  <!-- ============================================================
+       HOW THIS PAGE IS WIRED (load order matters, top to bottom):
+       1) THE BOARD   2) THE MACHINE   3) ART   4) THE CARDS
+       ============================================================ -->
+
+  <!-- 1) THE BOARD -->
+  <script src="game.config.js"></script>
+
+  <!-- 2) THE MACHINE (you don't edit this) -->
+  <script src="engine.js"></script>
+
+  <!-- 3) ART — how each character looks -->
+  <script src="art/player.js"></script>
+  <script src="art/zombie.js"></script>
+  <script src="art/boss.js"></script>
+
+  <!-- 4) 👉 ADD YOUR CARD HERE — one line per mechanic file in logic/ -->
+  <script src="logic/move-forward.js"></script>
+  <script src="logic/turn-left.js"></script>
+  <script src="logic/turn-right.js"></script>
+  <script src="logic/reach-the-exit.js"></script>
+  <script src="logic/health.js"></script>
+  <script src="logic/timer.js"></script>
+  <script src="logic/attack.js"></script>
+  <!-- <script src="logic/your-card.js"></script>   ← copy this line for your new card! -->
+
+  <!-- ============================================================
+       OPTIONAL MECHANICS — a menu. Uncomment a line to turn one on.
+       (See logic/README.md for what each needs and what clashes.)
+       ============================================================ -->
+  <!-- <script src="logic/tough-zombies.js"></script>    zombies take 2 hits (needs Attack) -->
+  <!-- <script src="logic/zombie-strike.js"></script>    adjacent zombies hit you each second (needs Health) -->
+  <!-- <script src="logic/patient-zombies.js"></script>  hit after 1s adjacent (needs Health; don't mix with Zombie Strike) -->
+  <!-- <script src="logic/deadly-touch.js"></script>     stepping on a zombie = instant game over -->
+  <!-- <script src="logic/swing-and-step.js"></script>   one strike per square (needs Attack) -->
+  <!-- <script src="logic/boss-battle.js"></script>      boss takes 5 hits to open the exit (needs Attack) -->
+</body>
+</html>

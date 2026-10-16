@@ -1,0 +1,225 @@
+/* ============================================================
+   The default look. (Later, "Art" takes this over.)
+   Trapper Keeper palette: cream, ink, periwinkle.
+   ============================================================ */
+:root {
+  --cream: #F4EDE0;
+  --sheet: #FFFFFF;
+  --ink: #2A2438;
+  --ink-soft: #5A5170;
+  --periwinkle: #8B7EC8;
+  --orange: #FF8C42;
+  --green: #6aa84f;
+  --sun: #FFC73D;
+  --mono: "JetBrains Mono", ui-monospace, "Courier New", monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 40px;
+}
+
+.wrap { width: min(560px, 100%); }
+
+header { text-align: center; margin-bottom: 18px; }
+
+#title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+#hud {
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: clamp(1rem, 2.4vw, 1.3rem);
+  color: var(--ink);
+  min-height: 1.4em;
+  letter-spacing: 0.02em;
+}
+
+/* --- the grid --- */
+#board {
+  display: grid;
+  gap: 6px;
+  /* shape + row/column sizing are set by the engine to match cols × rows */
+  aspect-ratio: 1 / 1;
+  background: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  padding: 6px;
+}
+#board.bump { animation: bump 0.25s; }
+@keyframes bump {
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.cell {
+  background: var(--sheet);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: clamp(1.6rem, 8vw, 3rem);
+  line-height: 1;
+  user-select: none;
+}
+.cell.start { background: color-mix(in srgb, var(--orange) 32%, var(--sheet)); }
+.cell.goal  { background: color-mix(in srgb, var(--green) 40%, var(--sheet)); }
+.cell.player { box-shadow: inset 0 0 0 3px var(--periwinkle); }
+
+.cell .emoji { filter: drop-shadow(0 1px 0 rgba(0,0,0,0.15)); }
+.cell .hp {
+  position: absolute;
+  bottom: 2px; left: 4px;
+  font-size: 0.42em;
+  font-family: var(--mono);
+  font-weight: 700;
+  color: #fff;
+  background: var(--ink);
+  border-radius: 999px;
+  padding: 0 .45em;
+  line-height: 1.5;
+}
+.cell .arrow {
+  position: absolute;
+  top: 2px; right: 4px;
+  font-size: 0.5em;
+  color: var(--ink);
+  font-family: var(--mono);
+}
+
+/* --- the card buttons --- */
+.cardbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+}
+.card-btn {
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 0.5em 0.9em;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--periwinkle);
+}
+.card-btn:hover { background: var(--sun); }
+.card-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--periwinkle); }
+.card-btn:focus-visible { outline: 2px solid var(--periwinkle); outline-offset: 2px; }
+
+.controls {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+.controls[hidden] { display: none; }
+.controls .ctrl-label { text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem; }
+.controls .ctrl { display: inline-flex; align-items: center; gap: 6px; }
+.controls kbd {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+  background: var(--sheet);
+  border: 1.5px solid var(--ink);
+  border-bottom-width: 3px;
+  border-radius: 6px;
+  padding: 1px 8px;
+}
+
+.loaded {
+  margin-top: 14px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+/* --- win / lose overlay --- */
+#overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(42, 36, 56, 0.6);
+  padding: 16px;
+}
+#overlay[hidden] { display: none; }
+#overlay .panel {
+  background: var(--sheet);
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 8px 8px 0 var(--periwinkle);
+  padding: 28px 32px;
+  text-align: center;
+  max-width: 340px;
+}
+#overlay h2 {
+  font-family: var(--mono);
+  letter-spacing: 0.12em;
+  margin: 0 0 8px;
+}
+#overlay.win h2 { color: var(--green); }
+#overlay.lose h2 { color: #c0392b; }
+#overlay p { margin: 0 0 18px; color: var(--ink); }
+#overlay button {
+  font-family: var(--mono);
+  border: 2px solid var(--ink);
+  background: var(--sun);
+  border-radius: 10px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+#overlay button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+
+/* --- transient message (toast) --- */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.5em 1em;
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--periwinkle);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s, transform 0.15s;
+  z-index: 50;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  #board.bump { animation: none; }
+  .card-btn:active { transform: none; }
+  #toast { transition: none; }
+}

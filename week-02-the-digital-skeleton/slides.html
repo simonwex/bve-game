@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Press Start</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,500;1,9..144,700&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  /* "Trapper Keeper × Mixtape" — matches Week 1. Committed cream theme (projected). */
+  :root{
+    --cream:#F4EDE0; --cream-soft:#FAF5EB; --sheet:#FFFFFF;
+    --ink:#2A2438; --ink-soft:#5A5170;
+    --periwinkle:#8B7EC8; --periwinkle-deep:#6E61B0; --lavender:#E9D9F0;
+    --hot-pink:#FF5A8A; --tangerine:#FF8C42; --aqua:#A8E8DC;
+    --cobalt:#3D5BE8; --sun:#FFC73D;
+    color-scheme:light;
+    --serif:"Fraunces", Georgia, serif;
+    --sans:"DM Sans", system-ui, sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, "Courier New", monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);
+    font-size:clamp(15px,1.5vw,18px);line-height:1.5;overflow:hidden}
+  .grid-paper{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.07;
+    background-image:linear-gradient(var(--periwinkle) 1px,transparent 1px),
+      linear-gradient(90deg,var(--periwinkle) 1px,transparent 1px);
+    background-size:28px 28px;background-position:-1px -1px}
+  .stage{position:fixed;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;
+    padding:clamp(20px,4vw,60px);
+    padding-top:calc(clamp(20px,4vw,60px) + env(safe-area-inset-top,0px));
+    padding-bottom:calc(clamp(20px,4vw,60px) + 42px + env(safe-area-inset-bottom,0px))}
+  .slide{width:min(1020px,100%);max-height:100%;overflow:auto;padding:0 10px 10px 0}
+  .slide.wide{width:min(1200px,100%)}
+  .slide[hidden]{display:none!important}
+
+  .kick{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--periwinkle-deep);font-size:clamp(11px,1.15vw,14px);margin:0 0 1rem}
+  .kick .star{color:var(--tangerine)}
+  h1{font-family:var(--serif);font-weight:900;line-height:.94;letter-spacing:-.025em;
+    text-wrap:balance;margin:0 0 1.1rem;font-size:clamp(2.6rem,7.4vw,5.2rem)}
+  h2{font-family:var(--serif);font-weight:800;line-height:1.0;letter-spacing:-.02em;
+    text-wrap:balance;margin:0 0 1rem;font-size:clamp(1.9rem,4.6vw,3.2rem)}
+  h1 em,h2 em{font-style:italic;color:var(--periwinkle)}
+  p{margin:0 0 1rem;max-width:60ch}
+  .lead{font-size:clamp(1.05rem,2vw,1.4rem)}
+  .soft{color:var(--ink-soft)}
+  .hl{background:linear-gradient(transparent 62%,var(--sun) 62%);padding:0 .1em}
+  strong{font-weight:700}
+
+  .title .intro p{max-width:34ch}
+  .tape{display:inline-block;background:rgba(255,199,61,.8);border:1px solid rgba(42,36,56,.25);
+    font-family:var(--mono);font-size:clamp(12px,1.4vw,15px);letter-spacing:.08em;
+    padding:.4em .9em;transform:rotate(-3deg);color:var(--ink);margin-bottom:1.2rem}
+
+  .big3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:.6rem}
+  .big3 .c{background:var(--sheet);border:2px solid var(--ink);border-radius:18px;
+    padding:1.1rem 1.2rem;box-shadow:7px 7px 0 var(--periwinkle)}
+  .big3 .c h3{font-family:var(--serif);font-style:italic;font-weight:800;margin:0 0 .3rem;
+    font-size:clamp(1.2rem,2.3vw,1.7rem)}
+  .big3 .c:nth-child(1) h3{color:var(--cobalt)}
+  .big3 .c:nth-child(2) h3{color:var(--hot-pink)}
+  .big3 .c:nth-child(3) h3{color:var(--tangerine)}
+  .big3 .c p{margin:0;color:var(--ink-soft);max-width:none;font-size:clamp(.95rem,1.6vw,1.1rem)}
+  .big3 code{font-family:var(--mono);background:var(--lavender);padding:.1em .35em;border-radius:5px;
+    white-space:nowrap}
+
+  .track{font-family:var(--mono);margin-top:.3rem}
+  .track .row{display:grid;grid-template-columns:auto 1fr auto;gap:.8rem 1rem;align-items:baseline;
+    padding:.68rem .2rem;border-bottom:1px dashed rgba(42,36,56,.22)}
+  .track .row:last-child{border-bottom:0}
+  .track .num{color:var(--cobalt);font-weight:700;font-size:clamp(1rem,1.7vw,1.25rem)}
+  .track .t{font-family:var(--sans);font-weight:500;min-width:0;font-size:clamp(1rem,1.8vw,1.3rem)}
+  .track .t em{font-family:var(--serif);font-style:italic;color:var(--ink-soft);display:block;
+    font-weight:500;font-size:clamp(.9rem,1.4vw,1.05rem)}
+  .chip{display:inline-block;font-family:var(--mono);font-weight:500;font-size:clamp(11px,1.3vw,14px);
+    border:2px solid var(--ink);border-radius:999px;padding:.3em .8em;white-space:nowrap;
+    background:var(--aqua);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+  .chip.pink{background:var(--hot-pink);color:#fff} .chip.sun{background:var(--sun)}
+  .chip.tang{background:var(--tangerine)} .chip.peri{background:var(--lavender)}
+  .chip.ghost{background:transparent;border-style:dashed;box-shadow:none}
+
+  pre.code{font-family:var(--mono);background:var(--ink);color:#F4EDE0;border-radius:14px;
+    padding:1rem 1.2rem;overflow:auto;font-size:clamp(.85rem,1.7vw,1.15rem);line-height:1.55;
+    box-shadow:6px 6px 0 var(--periwinkle);margin:.4rem 0 0;max-width:100%}
+  pre.code .c{color:#9aa0d4} pre.code .k{color:#FFC73D} pre.code .s{color:#A8E8DC}
+  pre.code .f{color:#FF9bcf}
+
+  .hud{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;align-items:center;
+    justify-content:space-between;gap:1rem;background:var(--cream-soft);border-top:2px solid var(--ink);
+    padding:.5rem clamp(14px,4vw,28px);padding-bottom:calc(.5rem + env(safe-area-inset-bottom,0px));
+    font-family:var(--mono);font-size:13px;color:var(--ink-soft)}
+  .hud .hint{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+  kbd{border:1.5px solid var(--ink);background:var(--sheet);border-radius:6px;padding:.05em .45em;
+    font-family:var(--mono);font-size:12px;color:var(--ink)}
+  .count b{color:var(--periwinkle-deep)}
+  .btns{display:flex;gap:.4rem}
+  button{font-family:var(--mono);font-size:13px;color:var(--ink);background:var(--sheet);
+    border:1.5px solid var(--ink);border-radius:8px;padding:.35em .7em;cursor:pointer}
+  button:hover{background:var(--lavender)}
+  button:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+  .zone{position:fixed;top:0;bottom:46px;width:30%;z-index:30;cursor:pointer;background:transparent}
+  .zone.prev{left:0} .zone.next{right:0;width:42%}
+
+  @media (max-width:640px){
+    .big3{grid-template-columns:1fr}
+    .zone{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grid-paper" aria-hidden="true"></div>
+<div class="zone prev" id="zprev" aria-hidden="true"></div>
+<div class="zone next" id="znext" aria-hidden="true"></div>
+
+<main class="stage">
+
+  <!-- 1 -->
+  <section class="slide title">
+    <div class="intro">
+      <div class="tape">▶ SIDE B · WEEK 2 OF 8</div>
+      <h1>Press<br>Start</h1>
+      <p class="lead soft">Last week: paper. Today: <span class="hl">real code</span> — your Zombie Maze, running for real.</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Recap</p>
+    <h2>You built this maze with your <em>bodies</em>. Now it's a program.</h2>
+    <p class="lead soft">Same board, same cards — but the computer runs it. And right now… you can't
+      lose yet. Let's fix that, and give everyone a power to add.</p>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · The map</p>
+    <h2>Your four <em>stats</em> are four <em>folders</em>.</h2>
+    <div class="track">
+      <div class="row"><span class="num">01</span><span class="t">logic<em>how the game works — the rules</em></span><span class="chip sun">today</span></div>
+      <div class="row"><span class="num">02</span><span class="t">art<em>how it looks</em></span><span class="chip ghost">soon</span></div>
+      <div class="row"><span class="num">03</span><span class="t">story<em>the why / the world</em></span><span class="chip ghost">soon</span></div>
+      <div class="row"><span class="num">04</span><span class="t">sound<em>music &amp; effects</em></span><span class="chip ghost">soon</span></div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Big idea</p>
+    <h1>One mechanic<br>= <span class="hl">one file.</span></h1>
+    <p class="lead soft">Exactly like your paper Mechanic Cards. Every card lives in <strong>logic/</strong>,
+      one little file each.</p>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide wide">
+    <p class="kick"><span class="star">★</span> Side B · Today's code, in 3 pieces</p>
+    <h2>Three ideas do <em>almost everything</em>.</h2>
+    <div class="big3">
+      <div class="c"><h3>A variable</h3><p>A number the game remembers. <code>health = 3</code></p></div>
+      <div class="c"><h3>Change it</h3><p>A little math. <code>health = health - 1</code></p></div>
+      <div class="c"><h3>An <code>if</code></h3><p>A yes/no question. <code>if (health &lt;= 0)…</code></p></div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · The card shape</p>
+    <h2>A card is the <em>same three</em> as on paper — plus hooks.</h2>
+    <pre class="code"><span class="f">registerCard</span>({
+  name: <span class="s">"Health"</span>,
+  whatItDoes: <span class="s">"Lose health when a zombie gets you."</span>,
+  limit: <span class="s">"At 0, it's game over."</span>,
+  <span class="c">// ...then the moments it reacts to</span>
+});</pre>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · The hooks = Scratch "when…"</p>
+    <h2>You already know these from <em>Scratch</em>.</h2>
+    <div class="track">
+      <div class="row"><span class="num">·</span><span class="t"><code>start(game)</code></span><span class="chip">when 🚩 clicked</span></div>
+      <div class="row"><span class="num">·</span><span class="t"><code>use(player, game)</code><em>makes a button</em></span><span class="chip peri">when sprite clicked</span></div>
+      <div class="row"><span class="num">·</span><span class="t"><code>onZombieHit(game)</code></span><span class="chip pink">when touching zombie</span></div>
+      <div class="row"><span class="num">·</span><span class="t"><code>everySecond(game)</code></span><span class="chip tang">forever · wait 1s</span></div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · All three, together</p>
+    <h2>Read <em>health.js</em>:</h2>
+    <pre class="code"><span class="f">start</span>(game) { game.health = <span class="k">3</span>; }          <span class="c">// a variable</span>
+
+<span class="f">onZombieHit</span>(game) {
+  game.health = game.health - <span class="k">1</span>;         <span class="c">// change it</span>
+  <span class="k">if</span> (game.health &lt;= <span class="k">0</span>) game.<span class="f">lose</span>(<span class="s">"Got you!"</span>);  <span class="c">// an if</span>
+}</pre>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Your turn</p>
+    <h2>Teach the computer <em>your</em> card.</h2>
+    <div class="track">
+      <div class="row"><span class="num">01</span><span class="t">Copy <code>_card-template.js</code> → rename it (e.g. <code>score.js</code>)</span></div>
+      <div class="row"><span class="num">02</span><span class="t">Fill in name / what it does / limit, and the blanks</span></div>
+      <div class="row"><span class="num">03</span><span class="t">Add <strong>one line</strong> in index.html: <code>&lt;script src="logic/score.js"&gt;&lt;/script&gt;</code></span></div>
+      <div class="row"><span class="num">04</span><span class="t">Reload Chrome → <strong>play your card</strong></span></div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Level up</p>
+    <h2>Finished early?</h2>
+    <div class="track">
+      <div class="row"><span class="num">01</span><span class="t">Health Pickup<em>a card that ADDS health</em></span><span class="chip">kind</span></div>
+      <div class="row"><span class="num">02</span><span class="t">Boss HP<em>the exit needs 2 hits to win — a 2nd variable + if</em></span><span class="chip pink">boss</span></div>
+      <div class="row"><span class="num">03</span><span class="t">Make it yours<em>tune the numbers; change an emoji in art/</em></span><span class="chip sun">style</span></div>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B complete · Next week</p>
+    <h1>You wrote <span class="hl">real code.</span></h1>
+    <p class="lead soft">A variable, a bit of math, an <em>if</em> — and a card that plugs into the game.
+      Week 3: we give the zombies a brain and make them <em>move</em>.</p>
+  </section>
+
+</main>
+
+<div class="hud">
+  <div class="hint"><kbd>←</kbd><kbd>→</kbd><span>flip &nbsp;·&nbsp;</span><kbd>F</kbd><span>fullscreen</span></div>
+  <div class="count">track <b id="cur">1</b> / <span id="tot">11</span></div>
+  <div class="btns">
+    <button id="prev" aria-label="Previous slide">‹ prev</button>
+    <button id="next" aria-label="Next slide">next ›</button>
+    <button id="full" aria-label="Toggle fullscreen">⤢</button>
+  </div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const curEl = document.getElementById('cur');
+  document.getElementById('tot').textContent = slides.length;
+  let i = 0;
+  const fromHash = () => {
+    const n = parseInt((location.hash||'').replace('#',''),10);
+    return (Number.isInteger(n) && n>=1 && n<=slides.length) ? n-1 : 0;
+  };
+  i = fromHash();
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach((s,idx)=> s.hidden = idx!==i);
+    curEl.textContent = i+1;
+    try{ history.replaceState(null,'','#'+(i+1)); }catch(e){}
+    const st = document.querySelector('.stage'); if(st) st.scrollTop = 0;
+  }
+  const nextS=()=>show(i+1), prevS=()=>show(i-1);
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();nextS();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prevS();}
+    else if(e.key==='Home'){e.preventDefault();show(0);}
+    else if(e.key==='End'){e.preventDefault();show(slides.length-1);}
+    else if(e.key==='f'||e.key==='F'){e.preventDefault();toggleFull();}
+  });
+  document.getElementById('next').addEventListener('click', nextS);
+  document.getElementById('prev').addEventListener('click', prevS);
+  document.getElementById('znext').addEventListener('click', nextS);
+  document.getElementById('zprev').addEventListener('click', prevS);
+  function toggleFull(){
+    try{ if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().catch(()=>{});}
+      else{document.exitFullscreen?.().catch(()=>{});} }catch(e){}
+  }
+  document.getElementById('full').addEventListener('click', toggleFull);
+  window.addEventListener('hashchange', ()=>show(fromHash()));
+  show(i);
+</script>
+</body>
+</html>

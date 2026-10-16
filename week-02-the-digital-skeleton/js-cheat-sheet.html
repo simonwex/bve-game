@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript Cheat-Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F4EDE0; --sheet:#fff; --ink:#2A2438; --ink-soft:#5A5170;
+    --periwinkle:#8B7EC8; --cobalt:#3D5BE8; --hot-pink:#FF5A8A; --tangerine:#FF8C42;
+    --aqua:#A8E8DC; --sun:#FFC73D;
+    --serif:"Fraunces",Georgia,serif; --sans:"DM Sans",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,"Courier New",monospace;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);
+    font-size:13px;line-height:1.45;padding:22px 18px 40px;display:flex;justify-content:center}
+  .page{width:min(900px,100%)}
+  header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+    border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:14px;flex-wrap:wrap}
+  h1{font-family:var(--serif);font-weight:800;font-size:1.7rem;margin:0}
+  .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;
+    color:var(--periwinkle);font-size:.72rem}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .box{background:var(--sheet);border:1.5px solid var(--ink);border-radius:12px;padding:12px 14px;
+    box-shadow:4px 4px 0 var(--periwinkle);break-inside:avoid}
+  .box h2{font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;
+    margin:0 0 8px;color:var(--ink)}
+  .box.a h2{color:var(--cobalt)} .box.b h2{color:var(--hot-pink)}
+  .box.c h2{color:var(--tangerine)} .box.d h2{color:var(--periwinkle)}
+  p{margin:0 0 6px} .muted{color:var(--ink-soft)}
+  code{font-family:var(--mono);background:#efe9dc;padding:.08em .32em;border-radius:4px;font-size:.92em}
+  pre{font-family:var(--mono);background:var(--ink);color:#F4EDE0;border-radius:9px;
+    padding:9px 11px;overflow:auto;font-size:.82rem;line-height:1.5;margin:6px 0 0}
+  pre .c{color:#9aa0d4} pre .k{color:#FFC73D} pre .s{color:#A8E8DC} pre .f{color:#FF9bcf}
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  td{padding:4px 2px;border-bottom:1px dashed rgba(42,36,56,.25);vertical-align:top}
+  td.h{font-family:var(--mono);white-space:nowrap;padding-right:10px;color:var(--ink)}
+  ol{margin:4px 0 0;padding-left:1.1em} ol li{margin-bottom:3px}
+  .full{grid-column:1 / -1}
+  .tip{font-family:var(--mono);font-size:.74rem;color:var(--ink-soft);margin-top:10px;text-align:center}
+  @media print{
+    @page{size:letter;margin:12mm}
+    body{background:#fff;padding:0;font-size:11.5px}
+    .box{box-shadow:none;border-color:#000}
+    .eyebrow{color:#555}
+    pre{background:#f0f0f0;color:#000} pre .c,pre .k,pre .s,pre .f{color:#000}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <h1>JavaScript Cheat-Sheet</h1>
+    <span class="eyebrow">Zombie Maze · Week 2 · keep me handy</span>
+  </header>
+
+  <div class="grid">
+    <div class="box a">
+      <h2>1 · A variable (a number we keep)</h2>
+      <p class="muted"><code>let</code> makes a number the game remembers.</p>
+      <pre><span class="k">let</span> health = <span class="k">3</span>;
+game.score = <span class="k">0</span>;</pre>
+    </div>
+
+    <div class="box b">
+      <h2>2 · Change it (a little math)</h2>
+      <p class="muted">Take the number, do math, put it back.</p>
+      <pre>game.health = game.health - <span class="k">1</span>;  <span class="c">// lose 1</span>
+game.score  = game.score  + <span class="k">10</span>; <span class="c">// gain 10</span></pre>
+    </div>
+
+    <div class="box c">
+      <h2>3 · An <code>if</code> (a yes/no question)</h2>
+      <p class="muted">Do something only when it's true.</p>
+      <pre><span class="k">if</span> (game.health &lt;= <span class="k">0</span>) {
+  game.<span class="f">lose</span>(<span class="s">"Game over!"</span>);
+}</pre>
+      <p class="muted" style="margin-top:6px">Compare with: <code>&lt;=</code> (at most) · <code>&gt;=</code> ·
+        <code>===</code> (same) · <code>&amp;&amp;</code> (and) · <code>||</code> (or)</p>
+    </div>
+
+    <div class="box d">
+      <h2>4 · The hooks (= Scratch "when…")</h2>
+      <table>
+        <tr><td class="h">start(game)</td><td>once, at the beginning — when 🚩 clicked</td></tr>
+        <tr><td class="h">use(player, game)</td><td>when its button is pressed (makes a button)</td></tr>
+        <tr><td class="h">onZombieHit(game)</td><td>when you step on a zombie</td></tr>
+        <tr><td class="h">everySecond(game)</td><td>once per second</td></tr>
+      </table>
+    </div>
+
+    <div class="box full">
+      <h2>The card template — copy, rename, fill the blanks</h2>
+      <pre><span class="f">registerCard</span>({
+  name: <span class="s">"My Mechanic"</span>,
+  whatItDoes: <span class="s">"Say what it does."</span>,
+  limit: <span class="s">"Say what keeps it fair."</span>,
+  <span class="f">start</span>(game)       { game.score = <span class="k">0</span>; }            <span class="c">// keep only the hooks you need</span>
+  <span class="f">everySecond</span>(game) { game.score = game.score + <span class="k">1</span>; }
+});</pre>
+    </div>
+
+    <div class="box full">
+      <h2>Add your card to the game — 4 steps</h2>
+      <ol>
+        <li>Copy <code>logic/_card-template.js</code> and rename it, e.g. <code>logic/score.js</code>.</li>
+        <li>Fill in the name and the blanks; delete the hooks you don't need.</li>
+        <li>In <code>index.html</code>, add one line under "ADD YOUR CARD HERE":
+          <code>&lt;script src="logic/score.js"&gt;&lt;/script&gt;</code></li>
+        <li>Save, then reload the page in Chrome. Your card is live!</li>
+      </ol>
+    </div>
+  </div>
+
+  <p class="tip">Helpers on <code>game</code>: health · timeLeft · score · lose("…") · win("…") ·
+    squareInFront(player) · removeZombieAt(pos) &nbsp;|&nbsp; Stuck? Open the console: ⌥⌘J</p>
+</div>
+</body>
+</html>
