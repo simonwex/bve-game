@@ -124,19 +124,12 @@
     border:1.5px solid var(--ink);border-radius:8px;padding:.35em .7em;cursor:pointer}
   .hud button:hover{background:var(--lavender)}
   .hud button:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
-  .zone{position:fixed;top:0;bottom:46px;width:30%;z-index:30;cursor:pointer;background:transparent}
-  .zone.prev{left:0} .zone.next{right:0;width:42%}
 
-  @media (max-width:640px){
-    .zone{display:none}
-  }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="grid-paper" aria-hidden="true"></div>
-<div class="zone prev" id="zprev" aria-hidden="true"></div>
-<div class="zone next" id="znext" aria-hidden="true"></div>
 
 <main class="stage">
 
@@ -429,8 +422,12 @@
   });
   document.getElementById('next').addEventListener('click', nextS);
   document.getElementById('prev').addEventListener('click', prevS);
-  document.getElementById('znext').addEventListener('click', nextS);
-  document.getElementById('zprev').addEventListener('click', prevS);
+  // Click an empty left/right margin to flip — but never swallow a button, link, or the scope.
+  document.addEventListener('click', e=>{
+    if(e.target.closest && e.target.closest('button, a, canvas, input, .vid, .pianoroll')) return;
+    const x = e.clientX / (window.innerWidth||1);
+    if(x < 0.35) prevS(); else if(x > 0.58) nextS();
+  });
   function toggleFull(){
     try{ if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().catch(()=>{});}
       else{document.exitFullscreen?.().catch(()=>{});} }catch(e){}
