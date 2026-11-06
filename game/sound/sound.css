@@ -1,0 +1,76 @@
+/* The Sound Lab — shared look. Matches the Week 1-2 "Trapper Keeper × Mixtape" theme. */
+:root{
+  --cream:#F4EDE0; --cream-soft:#FAF5EB; --sheet:#fff; --ink:#2A2438; --ink-soft:#5A5170;
+  --periwinkle:#8B7EC8; --periwinkle-deep:#6E61B0; --lavender:#E9D9F0;
+  --cobalt:#3D5BE8; --hot-pink:#FF5A8A; --tangerine:#FF8C42; --aqua:#A8E8DC; --sun:#FFC73D;
+  --serif:"Fraunces",Georgia,serif; --sans:"DM Sans",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Courier New",monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);
+  font-size:17px;line-height:1.5;padding:40px 20px 60px;display:flex;justify-content:center}
+.page{width:min(780px,100%)}
+
+.kick{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--periwinkle-deep);font-size:.8rem;margin:0 0 1rem}
+.kick .star{color:var(--tangerine)}
+
+h1{font-family:var(--serif);font-weight:800;line-height:1.0;letter-spacing:-.02em;
+  font-size:clamp(2.2rem,6vw,3.2rem);margin:0 0 .8rem}
+h1 em{font-style:italic;color:var(--periwinkle)}
+.lead{font-size:1.15rem;color:var(--ink-soft);margin:0 0 1.6rem}
+.lead strong{color:var(--ink)}
+
+/* the hands-on area: a read-only dark code card (mirrors the .js file) + Play */
+.lab{margin:0 0 1.4rem}
+.caption{font-family:var(--mono);font-size:.8rem;color:var(--ink-soft);margin:0 0 .5rem}
+.caption code{background:var(--lavender)}
+.code-view{display:block;width:100%;font-family:var(--mono);font-size:1rem;line-height:1.65;
+  background:var(--ink);color:#F4EDE0;border:none;border-radius:14px;padding:1.1rem 1.2rem;
+  box-shadow:7px 7px 0 var(--periwinkle);white-space:pre;overflow:auto;margin:0}
+.controls{display:flex;gap:.6rem;margin-top:1.1rem;flex-wrap:wrap}
+button{font-family:var(--mono);font-weight:700;font-size:1.05rem;cursor:pointer;
+  border:2px solid var(--ink);border-radius:12px;padding:.55em 1.2em;color:var(--ink);
+  background:var(--sun);box-shadow:4px 4px 0 var(--ink);transition:transform .05s,box-shadow .05s}
+button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+button.stop{background:var(--sheet)}
+button.finished{background:transparent;border-style:dashed;box-shadow:none;font-weight:500;font-size:.92rem}
+button.finished:hover{background:var(--lavender);transform:none;box-shadow:none}
+button.finished:active{transform:translate(1px,1px);box-shadow:none}
+button:focus-visible{outline:3px solid var(--cobalt);outline-offset:2px}
+.msg{min-height:1.4em;margin:.8rem 0 0;font-family:var(--mono);font-size:.9rem;color:var(--hot-pink)}
+
+/* the "what's happening" explainer card */
+.note{background:var(--cream-soft);border:2px solid var(--ink);border-radius:14px;
+  padding:1rem 1.2rem;box-shadow:5px 5px 0 var(--lavender);font-size:1rem;margin:0 0 1.6rem}
+.note strong{color:var(--periwinkle-deep)}
+.note p{margin:0 0 .5rem} .note p:last-child{margin:0}
+code{font-family:var(--mono);background:var(--lavender);padding:.08em .35em;border-radius:5px;font-size:.92em}
+
+/* prev / next step links */
+.steps{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  border-top:1px dashed rgba(42,36,56,.3);padding-top:1rem;font-family:var(--mono);font-size:.9rem}
+.steps a{color:var(--periwinkle-deep);text-decoration:none;font-weight:500}
+.steps a:hover{text-decoration:underline}
+.steps a.next{margin-left:auto}
+
+/* index tracklist (the mixtape metaphor) */
+.track{font-family:var(--mono);margin:1.6rem 0}
+.track a{display:grid;grid-template-columns:auto 1fr auto;gap:1rem;align-items:center;
+  text-decoration:none;color:var(--ink);padding:1rem .5rem;border-bottom:1px dashed rgba(42,36,56,.25)}
+.track a:first-child{border-top:1px dashed rgba(42,36,56,.25)}
+.track a:hover{background:var(--cream-soft)}
+.track .num{color:var(--periwinkle-deep);font-weight:700;font-size:1.1rem}
+.track .t{font-family:var(--sans);font-weight:600;font-size:1.15rem;line-height:1.25}
+.track .t em{font-family:var(--serif);font-style:italic;font-weight:600;color:var(--ink-soft);
+  display:block;font-size:.95rem}
+.track .go{color:var(--periwinkle);font-size:1.2rem}
+
+.chip{display:inline-block;font-family:var(--mono);font-weight:500;font-size:.75rem;
+  border:2px solid var(--ink);border-radius:999px;padding:.3em .8em;
+  background:var(--aqua);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.tip{font-family:var(--mono);font-size:.85rem;color:var(--ink-soft);margin-top:1.2rem}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}

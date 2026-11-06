@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>The Sound Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,500;1,9..144,700&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  /* "Trapper Keeper × Mixtape" — matches Week 1-2. Committed cream theme (projected). */
+  :root{
+    --cream:#F4EDE0; --cream-soft:#FAF5EB; --sheet:#FFFFFF;
+    --ink:#2A2438; --ink-soft:#5A5170;
+    --periwinkle:#8B7EC8; --periwinkle-deep:#6E61B0; --lavender:#E9D9F0;
+    --hot-pink:#FF5A8A; --tangerine:#FF8C42; --aqua:#A8E8DC;
+    --cobalt:#3D5BE8; --sun:#FFC73D;
+    color-scheme:light;
+    --serif:"Fraunces", Georgia, serif;
+    --sans:"DM Sans", system-ui, sans-serif;
+    --mono:"JetBrains Mono", ui-monospace, "Courier New", monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);
+    font-size:clamp(15px,1.5vw,18px);line-height:1.5;overflow:hidden}
+  .grid-paper{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.07;
+    background-image:linear-gradient(var(--periwinkle) 1px,transparent 1px),
+      linear-gradient(90deg,var(--periwinkle) 1px,transparent 1px);
+    background-size:28px 28px;background-position:-1px -1px}
+  .stage{position:fixed;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;
+    padding:clamp(20px,4vw,60px);
+    padding-top:calc(clamp(20px,4vw,60px) + env(safe-area-inset-top,0px));
+    padding-bottom:calc(clamp(20px,4vw,60px) + 42px + env(safe-area-inset-bottom,0px))}
+  .slide{width:min(1020px,100%);max-height:100%;overflow:auto;padding:0 10px 10px 0}
+  .slide[hidden]{display:none!important}
+
+  .kick{font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--periwinkle-deep);font-size:clamp(11px,1.15vw,14px);margin:0 0 1rem}
+  .kick .star{color:var(--tangerine)}
+  h1{font-family:var(--serif);font-weight:900;line-height:.94;letter-spacing:-.025em;
+    text-wrap:balance;margin:0 0 1.1rem;font-size:clamp(2.6rem,7.4vw,5.2rem)}
+  h2{font-family:var(--serif);font-weight:800;line-height:1.0;letter-spacing:-.02em;
+    text-wrap:balance;margin:0 0 1rem;font-size:clamp(1.9rem,4.6vw,3.2rem)}
+  h1 em,h2 em{font-style:italic;color:var(--periwinkle)}
+  p{margin:0 0 1rem;max-width:60ch}
+  .lead{font-size:clamp(1.05rem,2vw,1.4rem)}
+  .soft{color:var(--ink-soft)}
+  .hl{background:linear-gradient(transparent 62%,var(--sun) 62%);padding:0 .1em}
+  strong{font-weight:700}
+
+  .title .intro p{max-width:34ch}
+  .tape{display:inline-block;background:rgba(255,199,61,.8);border:1px solid rgba(42,36,56,.25);
+    font-family:var(--mono);font-size:clamp(12px,1.4vw,15px);letter-spacing:.08em;
+    padding:.4em .9em;transform:rotate(-3deg);color:var(--ink);margin-bottom:1.2rem}
+
+  .track{font-family:var(--mono);margin-top:.3rem}
+  .track .row{display:grid;grid-template-columns:auto 1fr auto;gap:.8rem 1rem;align-items:baseline;
+    padding:.68rem .2rem;border-bottom:1px dashed rgba(42,36,56,.22)}
+  .track .row:last-child{border-bottom:0}
+  .track .num{color:var(--cobalt);font-weight:700;font-size:clamp(1rem,1.7vw,1.25rem)}
+  .track .t{font-family:var(--sans);font-weight:500;min-width:0;font-size:clamp(1rem,1.8vw,1.3rem)}
+  .track .t em{font-family:var(--serif);font-style:italic;color:var(--ink-soft);display:block;
+    font-weight:500;font-size:clamp(.9rem,1.4vw,1.05rem)}
+  .chip{display:inline-block;font-family:var(--mono);font-weight:500;font-size:clamp(11px,1.3vw,14px);
+    border:2px solid var(--ink);border-radius:999px;padding:.3em .8em;white-space:nowrap;
+    background:var(--aqua);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+  .chip.pink{background:var(--hot-pink);color:#fff} .chip.sun{background:var(--sun)}
+  .chip.tang{background:var(--tangerine)} .chip.peri{background:var(--lavender)}
+  .chip.ghost{background:transparent;border-style:dashed;box-shadow:none}
+
+  pre.code{font-family:var(--mono);background:var(--ink);color:#F4EDE0;border-radius:14px;
+    padding:1rem 1.2rem;overflow:auto;font-size:clamp(.85rem,1.7vw,1.15rem);line-height:1.55;
+    box-shadow:6px 6px 0 var(--periwinkle);margin:.4rem 0 1rem;max-width:100%}
+  pre.code .c{color:#9aa0d4} pre.code .k{color:#FFC73D} pre.code .s{color:#A8E8DC}
+  pre.code .f{color:#FF9bcf}
+
+  /* --- Sound Lab deck extras --- */
+  .btnrow{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0 .4rem;align-items:center}
+  button.hear,button.hush{font-family:var(--mono);font-weight:700;cursor:pointer;color:var(--ink);
+    border:2px solid var(--ink);border-radius:12px;padding:.5em 1em;box-shadow:4px 4px 0 var(--ink);
+    font-size:clamp(.95rem,1.6vw,1.1rem);transition:transform .05s,box-shadow .05s}
+  button.hear{background:var(--sun)} button.hush{background:var(--sheet)}
+  button.hear:hover,button.hush:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+  button.hear:active,button.hush:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+  button.hear:focus-visible,button.hush:focus-visible{outline:3px solid var(--cobalt);outline-offset:2px}
+
+  canvas.scope{display:block;width:100%;height:auto;aspect-ratio:900/180;background:var(--ink);
+    border-radius:14px;box-shadow:6px 6px 0 var(--periwinkle);margin:.4rem 0 0}
+  .scope-label{font-family:var(--mono);font-size:clamp(11px,1.2vw,13px);color:var(--ink-soft);margin:.5rem 0 0}
+
+  .pianoroll{display:flex;align-items:flex-end;gap:.6rem;height:150px;margin:.8rem 0 .2rem}
+  .pianoroll .bar{flex:1;background:var(--lavender);border:2px solid var(--ink);border-radius:8px 8px 0 0;
+    box-shadow:3px 3px 0 var(--periwinkle);display:flex;align-items:flex-start;justify-content:center;
+    font-family:var(--mono);font-size:13px;color:var(--ink-soft);padding-top:.3rem;
+    transition:background .1s,transform .1s}
+  .pianoroll .bar.on{background:var(--sun);transform:translateY(-6px)}
+
+  .diagram{display:block;margin:.6rem 0;max-width:520px;width:100%;height:auto}
+
+  a.watch{display:inline-block;margin-top:.6rem;font-family:var(--mono);font-weight:700;
+    background:var(--hot-pink);color:#fff;border:2px solid var(--ink);border-radius:999px;
+    padding:.4em 1.1em;box-shadow:3px 3px 0 var(--ink);text-decoration:none}
+  a.watch:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .vid{display:block;background:var(--sheet);border:2px solid var(--ink);border-radius:18px;
+    padding:1.2rem 1.4rem;box-shadow:7px 7px 0 var(--periwinkle);text-decoration:none;color:var(--ink);
+    max-width:620px}
+  .vid:hover{background:var(--cream-soft)}
+  .vid .vt{display:block;font-family:var(--serif);font-style:italic;font-weight:800;
+    font-size:clamp(1.1rem,2.2vw,1.5rem);color:var(--periwinkle-deep)}
+  .vid .vu{display:block;font-family:var(--mono);font-size:clamp(11px,1.3vw,13px);color:var(--ink-soft);
+    word-break:break-all;margin-top:.2rem}
+
+  .hud{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;align-items:center;
+    justify-content:space-between;gap:1rem;background:var(--cream-soft);border-top:2px solid var(--ink);
+    padding:.5rem clamp(14px,4vw,28px);padding-bottom:calc(.5rem + env(safe-area-inset-bottom,0px));
+    font-family:var(--mono);font-size:13px;color:var(--ink-soft)}
+  .hud .hint{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+  kbd{border:1.5px solid var(--ink);background:var(--sheet);border-radius:6px;padding:.05em .45em;
+    font-family:var(--mono);font-size:12px;color:var(--ink)}
+  .count b{color:var(--periwinkle-deep)}
+  .btns{display:flex;gap:.4rem}
+  .hud button{font-family:var(--mono);font-size:13px;color:var(--ink);background:var(--sheet);
+    border:1.5px solid var(--ink);border-radius:8px;padding:.35em .7em;cursor:pointer}
+  .hud button:hover{background:var(--lavender)}
+  .hud button:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+  .zone{position:fixed;top:0;bottom:46px;width:30%;z-index:30;cursor:pointer;background:transparent}
+  .zone.prev{left:0} .zone.next{right:0;width:42%}
+
+  @media (max-width:640px){
+    .zone{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grid-paper" aria-hidden="true"></div>
+<div class="zone prev" id="zprev" aria-hidden="true"></div>
+<div class="zone next" id="znext" aria-hidden="true"></div>
+
+<main class="stage">
+
+  <!-- 1 · TITLE -->
+  <section class="slide title">
+    <div class="intro">
+      <div class="tape">▶ SIDE B · THE SOUND LAB</div>
+      <h1>Sound.</h1>
+      <p class="lead soft">Today you'll make the computer <span class="hl">beep, slide, and sing</span> —
+        with a few numbers and a loop.</p>
+    </div>
+  </section>
+
+  <!-- 2 · WHAT IS SOUND -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · What is sound?</p>
+    <h2>Sound is the air <em>wiggling</em>.</h2>
+    <p class="lead soft">Something vibrates → it pushes the air → the air pushes your eardrum → you hear it.
+      Fast wiggles sound <strong>high</strong>; slow wiggles sound <strong>low</strong>.</p>
+    <svg class="diagram" viewBox="0 0 520 150" role="img" aria-label="A speaker sends sound waves through the air to an ear">
+      <text x="24" y="100" font-size="60">🔊</text>
+      <g fill="none" stroke="#8B7EC8" stroke-width="5" stroke-linecap="round">
+        <path d="M210 40 q34 35 0 70"/>
+        <path d="M250 28 q46 47 0 94"/>
+        <path d="M290 18 q58 57 0 114"/>
+      </g>
+      <text x="420" y="100" font-size="60">👂</text>
+    </svg>
+    <a class="watch" id="explainer" href="#" target="_blank" rel="noopener">▶ Watch: what is sound?</a>
+  </section>
+
+  <!-- 3 · FAST OR SLOW -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Fast or slow?</p>
+    <h2>Fast wiggles = <em>high</em>. Slow wiggles = <em>low</em>.</h2>
+    <canvas class="scope" width="900" height="180"></canvas>
+    <p class="scope-label">↑ the real wave of the sound playing — press a button and watch it</p>
+    <div class="btnrow">
+      <button class="hear" data-do="hz" data-hz="220">▶ 220 Hz (low)</button>
+      <button class="hear" data-do="hz" data-hz="440">▶ 440 Hz</button>
+      <button class="hear" data-do="hz" data-hz="880">▶ 880 Hz (high)</button>
+      <button class="hush">⏹ Stop</button>
+    </div>
+  </section>
+
+  <!-- 4 · HERTZ -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Counting the wiggles</p>
+    <h2>We measure wiggles in <em>hertz</em> (Hz).</h2>
+    <p class="lead soft">1 Hz = one wiggle per second. <strong>440 Hz</strong> = 440 wiggles every second —
+      that's the "A" instruments tune to.</p>
+    <canvas class="scope" width="900" height="180"></canvas>
+    <div class="btnrow">
+      <button class="hear" data-do="hz" data-hz="440">▶ Hear 440 Hz</button>
+      <button class="hush">⏹ Stop</button>
+    </div>
+  </section>
+
+  <!-- 5 · IN YOUR CODE -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · In your code</p>
+    <h2>That number <em>is</em> the pitch.</h2>
+    <pre class="code"><span class="f">tone</span>(<span class="k">440</span>, <span class="k">400</span>);  <span class="c">// 440 Hz, for 400 milliseconds</span></pre>
+    <canvas class="scope" width="900" height="180"></canvas>
+    <div class="btnrow">
+      <button class="hear" data-do="hz" data-hz="440">▶ Play it</button>
+      <button class="hush">⏹ Stop</button>
+    </div>
+    <p class="soft">That's step <strong>01</strong> in the Sound Lab.</p>
+  </section>
+
+  <!-- 6 · LOOPS -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Do it again: loops</p>
+    <h2>A <em>loop</em> repeats a sound.</h2>
+    <pre class="code"><span class="k">for</span> (<span class="k">let</span> i = <span class="k">0</span>; i &lt; <span class="k">5</span>; i++) {
+  <span class="f">tone</span>(<span class="k">880</span>, <span class="k">100</span>);   <span class="c">// a short beep</span>
+  <span class="f">rest</span>(<span class="k">150</span>);        <span class="c">// a gap after it</span>
+}</pre>
+    <div class="btnrow">
+      <button class="hear" data-do="beeps">▶ 5 beeps</button>
+      <button class="hush">⏹ Stop</button>
+    </div>
+    <p class="soft">Sound Lab step <strong>02</strong>.</p>
+  </section>
+
+  <!-- 7 · SWEEP -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Change the number each time</p>
+    <h2>Move the pitch → a <em>slide</em>.</h2>
+    <pre class="code"><span class="k">for</span> (<span class="k">let</span> f = <span class="k">200</span>; f &lt; <span class="k">900</span>; f = f + <span class="k">20</span>) {
+  <span class="f">tone</span>(f, <span class="k">30</span>);
+}</pre>
+    <canvas class="scope" width="900" height="180"></canvas>
+    <div class="btnrow">
+      <button class="hear" data-do="sweep">▶ Slide up</button>
+      <button class="hear" data-do="laser">▶ Laser (down)</button>
+      <button class="hush">⏹ Stop</button>
+    </div>
+    <p class="soft">Sound Lab steps <strong>03</strong> &amp; <strong>05</strong>.</p>
+  </section>
+
+  <!-- 8 · ARRAY / TUNE -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · A tune is a list</p>
+    <h2>An <em>array</em> = a list of pitches.</h2>
+    <pre class="code"><span class="k">const</span> song = [<span class="k">262</span>, <span class="k">330</span>, <span class="k">392</span>, <span class="k">523</span>];
+<span class="k">for</span> (<span class="k">const</span> hz <span class="k">of</span> song) <span class="f">tone</span>(hz, <span class="k">220</span>);</pre>
+    <div class="pianoroll">
+      <div class="bar" data-i="0" style="height:50%">262</div>
+      <div class="bar" data-i="1" style="height:63%">330</div>
+      <div class="bar" data-i="2" style="height:75%">392</div>
+      <div class="bar" data-i="3" style="height:100%">523</div>
+    </div>
+    <div class="btnrow">
+      <button class="hear" data-do="melody">▶ Play the tune</button>
+      <button class="hush">⏹ Stop</button>
+    </div>
+    <p class="soft">Sound Lab step <strong>04</strong>.</p>
+  </section>
+
+  <!-- 9 · SOUND EFFECTS -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Sound effects</p>
+    <h2>Shape the pitch → <em>game juice</em>. ⚡</h2>
+    <canvas class="scope" width="900" height="180"></canvas>
+    <div class="btnrow">
+      <button class="hear" data-do="laser">⚡ Laser</button>
+      <button class="hear" data-do="powerup">🚀 Power-up</button>
+      <button class="hear" data-do="alarm">👾 Alarm</button>
+      <button class="hush">⏹ Stop</button>
+    </div>
+    <p class="soft">Sound Lab step <strong>05</strong> — this is what lives in <code>sound/</code> in a real game.</p>
+  </section>
+
+  <!-- 10 · YOUR TURN -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B · Your turn</p>
+    <h2>Open the <em>Sound Lab</em>.</h2>
+    <div class="track">
+      <div class="row"><span class="num">01</span><span class="t">One tone<em>tone(pitch, ms)</em></span></div>
+      <div class="row"><span class="num">02</span><span class="t">A beep that repeats<em>a loop</em></span></div>
+      <div class="row"><span class="num">03</span><span class="t">A sliding sound<em>change the number each time</em></span></div>
+      <div class="row"><span class="num">04</span><span class="t">Make a tune<em>a list of pitches (an array)</em></span></div>
+      <div class="row"><span class="num">05</span><span class="t">Make a sound effect<em>your own</em></span></div>
+    </div>
+    <p class="lead soft">Type the example into the <code>.js</code> file → <kbd>⌘S</kbd> save →
+      <kbd>⌘R</kbd> reload → <strong>▶ Play mine</strong>. Stuck? <strong>▶ Finished version</strong>.</p>
+    <a class="watch" href="index.html">▶ Open the Sound Lab →</a>
+  </section>
+
+  <!-- 11 · WHERE THIS GOES / VIDEO -->
+  <section class="slide">
+    <p class="kick"><span class="star">★</span> Side B complete · Watch this</p>
+    <h1>From beeps to <span class="hl">real music.</span> 🎧</h1>
+    <p class="lead soft">Pros build whole songs out of exactly this — numbers, loops, and lists.</p>
+    <a class="vid" id="demoVid" href="#" target="_blank" rel="noopener">
+      <span class="vt">Coding Trance Music from Scratch</span>
+      <span class="vu" id="demoUrl"></span>
+      <span class="watch">▶ Watch the demo</span>
+    </a>
+  </section>
+
+</main>
+
+<div class="hud">
+  <div class="hint"><kbd>←</kbd><kbd>→</kbd><span>flip &nbsp;·&nbsp;</span><kbd>F</kbd><span>fullscreen</span></div>
+  <div class="count">track <b id="cur">1</b> / <span id="tot">11</span></div>
+  <div class="btns">
+    <button id="prev" aria-label="Previous slide">‹ prev</button>
+    <button id="next" aria-label="Next slide">next ›</button>
+    <button id="full" aria-label="Toggle fullscreen">⤢</button>
+  </div>
+</div>
+
+<!-- the beep machine (shared with the lab); gives us tone/rest/beginRun/stopAll/getAnalyser -->
+<script src="sound.js"></script>
+
+<script>
+  /* ===== EDIT THESE before class if you want different videos ============== */
+  var EXPLAINER_URL = "https://www.youtube.com/results?search_query=what+is+sound+for+kids";
+  var DEMO_URL = "https://www.youtube.com/watch?v=iu5rnQkfO6M"; /* "Coding Trance Music from Scratch" */
+  /* ======================================================================== */
+  var evid = document.getElementById('explainer'); if (evid) { evid.href = EXPLAINER_URL; }
+  var dvid = document.getElementById('demoVid'); if (dvid) { dvid.href = DEMO_URL; }
+  var durl = document.getElementById('demoUrl'); if (durl) { durl.textContent = DEMO_URL.replace(/^https?:\/\//, ''); }
+
+  /* ---- hear-it buttons: all go through beginRun() so the safety caps reset each click ---- */
+  var SONG = [262, 330, 392, 523];
+
+  function hearHz(n)  { beginRun(); tone(n, 1200); }
+  function sweepUp()  { beginRun(); for (var f = 200; f < 900; f = f + 20) { tone(f, 30); } }
+  function laser()    { beginRun(); for (var f = 900; f > 200; f = f - 40) { tone(f, 25); } }
+  function beeps()    { beginRun(); for (var i = 0; i < 5; i++) { tone(880, 100); rest(150); } }
+  function powerup()  { beginRun(); for (var f = 200; f < 1200; f = f + 60) { tone(f, 20); } }
+  function alarm()    { beginRun(); for (var i = 0; i < 4; i++) { tone(700, 150); tone(500, 150); } }
+  function melody()   {
+    beginRun();
+    for (var i = 0; i < SONG.length; i++) { tone(SONG[i], 220); }
+    highlightMelody();
+  }
+
+  function highlightMelody() {
+    var bars = Array.prototype.slice.call(document.querySelectorAll('.pianoroll .bar'));
+    bars.forEach(function (b) { b.classList.remove('on'); });
+    SONG.forEach(function (hz, i) {
+      setTimeout(function () {
+        bars.forEach(function (b) { b.classList.remove('on'); });
+        if (bars[i]) { bars[i].classList.add('on'); }
+        if (i === SONG.length - 1) {
+          setTimeout(function () { if (bars[i]) { bars[i].classList.remove('on'); } }, 220);
+        }
+      }, i * 220);
+    });
+  }
+
+  Array.prototype.slice.call(document.querySelectorAll('.hear')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var what = b.getAttribute('data-do');
+      if (what === 'hz') { hearHz(parseInt(b.getAttribute('data-hz'), 10)); }
+      else if (what === 'sweep') { sweepUp(); }
+      else if (what === 'laser') { laser(); }
+      else if (what === 'beeps') { beeps(); }
+      else if (what === 'powerup') { powerup(); }
+      else if (what === 'alarm') { alarm(); }
+      else if (what === 'melody') { melody(); }
+    });
+  });
+  Array.prototype.slice.call(document.querySelectorAll('.hush')).forEach(function (b) {
+    b.addEventListener('click', function () { stopAll(); });
+  });
+
+  /* ---- the oscilloscope: draw the live waveform into every .scope canvas ---- */
+  var scopes = Array.prototype.slice.call(document.querySelectorAll('canvas.scope'));
+  function drawScopes() {
+    var an = (typeof getAnalyser === 'function') ? getAnalyser() : null;
+    var buf = null;
+    if (an) { buf = new Uint8Array(an.fftSize); an.getByteTimeDomainData(buf); }
+    scopes.forEach(function (cv) { drawScope(cv, buf); });
+    requestAnimationFrame(drawScopes);
+  }
+  function drawScope(cv, buf) {
+    var g = cv.getContext('2d');
+    var w = cv.width, h = cv.height;
+    g.fillStyle = '#2A2438';
+    g.fillRect(0, 0, w, h);
+    g.lineWidth = 3;
+    g.strokeStyle = '#A8E8DC';
+    g.beginPath();
+    if (buf) {
+      for (var x = 0; x < w; x++) {
+        var v = buf[Math.floor(x / w * buf.length)] / 128 - 1;   // -1..1
+        var y = h / 2 + v * (h / 2 - 8);
+        if (x === 0) { g.moveTo(x, y); } else { g.lineTo(x, y); }
+      }
+    } else {
+      g.moveTo(0, h / 2); g.lineTo(w, h / 2);   // idle: a calm flat line
+    }
+    g.stroke();
+  }
+  if (scopes.length) { requestAnimationFrame(drawScopes); }
+</script>
+
+<script>
+  /* ---- slide navigation (same as the Week 1-2 decks) ---- */
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const curEl = document.getElementById('cur');
+  document.getElementById('tot').textContent = slides.length;
+  let i = 0;
+  const fromHash = () => {
+    const n = parseInt((location.hash||'').replace('#',''),10);
+    return (Number.isInteger(n) && n>=1 && n<=slides.length) ? n-1 : 0;
+  };
+  i = fromHash();
+  function show(n){
+    i = Math.max(0, Math.min(slides.length-1, n));
+    slides.forEach((s,idx)=> s.hidden = idx!==i);
+    curEl.textContent = i+1;
+    try{ history.replaceState(null,'','#'+(i+1)); }catch(e){}
+    const st = document.querySelector('.stage'); if(st) st.scrollTop = 0;
+    if(typeof stopAll==='function') stopAll();   // leaving a slide hushes any sound
+  }
+  const nextS=()=>show(i+1), prevS=()=>show(i-1);
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();nextS();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prevS();}
+    else if(e.key==='Home'){e.preventDefault();show(0);}
+    else if(e.key==='End'){e.preventDefault();show(slides.length-1);}
+    else if(e.key==='f'||e.key==='F'){e.preventDefault();toggleFull();}
+  });
+  document.getElementById('next').addEventListener('click', nextS);
+  document.getElementById('prev').addEventListener('click', prevS);
+  document.getElementById('znext').addEventListener('click', nextS);
+  document.getElementById('zprev').addEventListener('click', prevS);
+  function toggleFull(){
+    try{ if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().catch(()=>{});}
+      else{document.exitFullscreen?.().catch(()=>{});} }catch(e){}
+  }
+  document.getElementById('full').addEventListener('click', toggleFull);
+  window.addEventListener('hashchange', ()=>show(fromHash()));
+  show(i);
+</script>
+</body>
+</html>

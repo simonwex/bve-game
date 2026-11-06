@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Lab · 03 · A Sliding Sound</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sound.css">
+</head>
+<body>
+<div class="page">
+  <p class="kick"><span class="star">★</span> Side B · The Sound Lab · 03</p>
+  <h1>A <em>sliding</em> sound.</h1>
+  <p class="lead">Same loop as before — but this time the <strong>number changes</strong> every
+    time around. Little steps up = the sound slides up.</p>
+
+  <div class="lab">
+    <p class="caption">📎 Example — type this inside <code>play()</code> in <code>03-changing-frequency.js</code>:</p>
+    <pre class="code-view"></pre>
+    <div class="controls">
+      <button class="play">▶ Play mine</button>
+      <button class="stop">⏹ Stop</button>
+      <button class="finished">▶ Finished version</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>Your turn:</strong> type the loop into <code>03-changing-frequency.js</code>, save
+      (<code>⌘S</code>), reload (<code>⌘R</code>), <strong>▶ Play mine</strong>.</p>
+    <p><strong>What's happening:</strong> <code>f</code> is the pitch. It <em>starts</em> at 200, and
+      each time around we do <code>f = f + 40</code> to make it bigger, until it reaches 900 — lots
+      of tiny beeps climbing. Try <code>+ 80</code> (faster) or <code>+ 10</code> (smoother). For a
+      sad-trombone slide <strong>down</strong>, start high and subtract:
+      <code>f = 900; f &gt; 200; f = f - 40</code>.</p>
+  </div>
+
+  <nav class="steps">
+    <a href="02-intermittent-beep.html">← Back</a>
+    <a href="index.html">↑ All steps</a>
+    <a class="next" href="04-arrays-make-a-tune.html">Next: make a tune →</a>
+  </nav>
+</div>
+<script src="sound.js"></script>
+<script src="teacher/03-changing-frequency-done.js"></script>
+<script src="03-changing-frequency.js"></script>
+</body>
+</html>

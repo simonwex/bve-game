@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Lab · 04 · Make a Tune</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sound.css">
+</head>
+<body>
+<div class="page">
+  <p class="kick"><span class="star">★</span> Side B · The Sound Lab · 04</p>
+  <h1>Make a <em>tune</em>. 🎵</h1>
+  <p class="lead">A <strong>list</strong> of pitches is called an <strong>array</strong> — think of
+    it as your playlist. The loop plays each number in turn.</p>
+
+  <div class="lab">
+    <p class="caption">📎 Example — type this inside <code>play()</code> in <code>04-arrays-make-a-tune.js</code>:</p>
+    <pre class="code-view"></pre>
+    <div class="controls">
+      <button class="play">▶ Play mine</button>
+      <button class="stop">⏹ Stop</button>
+      <button class="finished">▶ Finished version</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>Your turn:</strong> type it into <code>04-arrays-make-a-tune.js</code>, then change the
+      numbers in the list. Save (<code>⌘S</code>), reload (<code>⌘R</code>), <strong>▶ Play mine</strong>.</p>
+    <p><strong>What's happening:</strong> <code>song</code> is an <strong>array</strong> — a list of
+      numbers inside <code>[ ]</code> with commas between them. <code>for (const hz of song)</code>
+      means <em>"for each number in the list, in order…"</em> and plays it.</p>
+    <p><strong>Pitches for a melody</strong> (low → high, a nice scale to pick from):
+      <code>262, 294, 330, 349, 392, 440, 494, 523</code>. Make the list longer, repeat numbers,
+      jump around — it's your song!</p>
+  </div>
+
+  <nav class="steps">
+    <a href="03-changing-frequency.html">← Back</a>
+    <a href="index.html">↑ All steps</a>
+    <a class="next" href="05-make-a-sound-effect.html">Next: make a sound effect →</a>
+  </nav>
+</div>
+<script src="sound.js"></script>
+<script src="teacher/04-arrays-make-a-tune-done.js"></script>
+<script src="04-arrays-make-a-tune.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Lab · 01 · One Tone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sound.css">
+</head>
+<body>
+<div class="page">
+  <p class="kick"><span class="star">★</span> Side B · The Sound Lab · 01</p>
+  <h1>One <em>tone</em>.</h1>
+  <p class="lead">A sound is just <strong>one line of code</strong>. Type it, then make it yours.</p>
+
+  <div class="lab">
+    <p class="caption">📎 Example — type this inside <code>play()</code> in <code>01-one-tone.js</code>:</p>
+    <pre class="code-view"></pre>
+    <div class="controls">
+      <button class="play">▶ Play mine</button>
+      <button class="stop">⏹ Stop</button>
+      <button class="finished">▶ Finished version</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>Your turn:</strong> open <code>01-one-tone.js</code>, type the example inside
+      <code>play()</code>, press <code>⌘S</code> to save, reload (<code>⌘R</code>), then press
+      <strong>▶ Play mine</strong>. Stuck? <strong>▶ Finished version</strong> plays it for you.</p>
+    <p><strong>What's happening:</strong> <code>tone(440, 400)</code> means <em>"play a sound at
+      <strong>440</strong> Hz (the pitch) for <strong>400</strong> milliseconds."</em> Try
+      <code>220</code> (lower) then <code>880</code> (higher) — doubling the number jumps up an octave.</p>
+  </div>
+
+  <nav class="steps">
+    <a href="index.html">↑ All steps</a>
+    <a class="next" href="02-intermittent-beep.html">Next: a beep that repeats →</a>
+  </nav>
+</div>
+<script src="sound.js"></script>
+<script src="teacher/01-one-tone-done.js"></script>
+<script src="01-one-tone.js"></script>
+</body>
+</html>

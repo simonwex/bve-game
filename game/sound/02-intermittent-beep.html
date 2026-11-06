@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sound Lab · 02 · A Beep That Repeats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sound.css">
+</head>
+<body>
+<div class="page">
+  <p class="kick"><span class="star">★</span> Side B · The Sound Lab · 02</p>
+  <h1>A beep that <em>repeats</em>.</h1>
+  <p class="lead">Beep… beep… beep. Instead of writing the line five times, we use a
+    <strong>loop</strong> — it means "do this again and again."</p>
+
+  <div class="lab">
+    <p class="caption">📎 Example — type this inside <code>play()</code> in <code>02-intermittent-beep.js</code>:</p>
+    <pre class="code-view"></pre>
+    <div class="controls">
+      <button class="play">▶ Play mine</button>
+      <button class="stop">⏹ Stop</button>
+      <button class="finished">▶ Finished version</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>Your turn:</strong> type the loop into <code>02-intermittent-beep.js</code>, save
+      (<code>⌘S</code>), reload (<code>⌘R</code>), <strong>▶ Play mine</strong>.</p>
+    <p><strong>What's happening:</strong> the <code>for</code> line says <em>"do the stuff in the
+      <code>{ }</code> brackets <strong>5</strong> times."</em> Each time: one beep, then a rest.
+      Change <code>5</code> to beep more or fewer times; change the <code>150</code> rest to speed it
+      up or slow it down. What happens if you delete the <code>rest(150);</code> line?</p>
+  </div>
+
+  <nav class="steps">
+    <a href="01-one-tone.html">← Back</a>
+    <a href="index.html">↑ All steps</a>
+    <a class="next" href="03-changing-frequency.html">Next: a sliding sound →</a>
+  </nav>
+</div>
+<script src="sound.js"></script>
+<script src="teacher/02-intermittent-beep-done.js"></script>
+<script src="02-intermittent-beep.js"></script>
+</body>
+</html>
