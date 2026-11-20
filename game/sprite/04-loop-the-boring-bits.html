@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprite Lab · 04 · Loop the Boring Bits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sprite.css">
+</head>
+<body>
+<div class="page">
+  <p class="kick"><span class="star">★</span> Side C · The Sprite Lab · 04</p>
+  <h1>Let a <em>loop</em> do the walking.</h1>
+  <p class="lead">A <strong>loop</strong> says "do this line again and again." One loop replaces
+    eight <code>forward()</code> lines. With a few loops and turns, we'll walk the whole
+    field to the ⭐.</p>
+
+  <div class="stage"></div>
+
+  <div class="lab">
+    <p class="caption">📎 Example — type this inside <code>walk()</code> in <code>04-loop-the-boring-bits.js</code>:</p>
+    <pre class="code-view"></pre>
+    <div class="controls">
+      <button class="play">▶ Play mine</button>
+      <button class="stop">⏹ Reset</button>
+      <button class="finished">▶ Finished version</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>Your turn:</strong> type it into <code>04-loop-the-boring-bits.js</code>, save,
+      reload, <strong>▶ Play mine</strong>. Reach the ⭐!</p>
+    <p><strong>What's happening:</strong> <code>for (var i = 0; i &lt; 8; i = i + 1) { forward(); }</code>
+      means "do <code>forward()</code> 8 times." Change an <code>8</code> to a wrong number and
+      watch the character bump into a pond — then fix it. The field is the same for everyone; can
+      you find a different set of loops that still reaches the goal?</p>
+  </div>
+
+  <nav class="steps">
+    <a href="03-walk-the-path.html">← Back</a>
+    <a href="index.html">↑ All steps</a>
+    <a class="next" href="05-follow-a-route.html">Next: follow a route →</a>
+  </nav>
+</div>
+<script src="sprite.js"></script>
+<script src="teacher/04-loop-the-boring-bits-done.js"></script>
+<script src="04-loop-the-boring-bits.js"></script>
+</body>
+</html>

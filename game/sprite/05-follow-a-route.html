@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprite Lab · 05 · Follow a Route</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sprite.css">
+</head>
+<body>
+<div class="page">
+  <p class="kick"><span class="star">★</span> Side C · The Sprite Lab · 05</p>
+  <h1>A route is a <em>list</em>.</h1>
+  <p class="lead">In the Sound Lab, a tune was a <strong>list</strong> of pitches. Here, a
+    journey is a <strong>list</strong> of moves. Write the route down as a list, then let one
+    loop walk it — all the way to the ⭐.</p>
+
+  <div class="stage"></div>
+
+  <div class="lab">
+    <p class="caption">📎 Example — type this inside <code>walk()</code> in <code>05-follow-a-route.js</code>:</p>
+    <pre class="code-view"></pre>
+    <div class="controls">
+      <button class="play">▶ Play mine</button>
+      <button class="stop">⏹ Reset</button>
+      <button class="finished">▶ Finished version</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>Your turn:</strong> type it into <code>05-follow-a-route.js</code>, save, reload,
+      <strong>▶ Play mine</strong>.</p>
+    <p><strong>What's happening:</strong> the list <code>route</code> holds the whole plan —
+      numbers are how many steps to walk, <code>"R"</code> and <code>"L"</code> are turns. The
+      loop reads the list one item at a time and does it. Change the list, change the path. This
+      is exactly how the game's move cards think!</p>
+  </div>
+
+  <nav class="steps">
+    <a href="04-loop-the-boring-bits.html">← Back</a>
+    <a href="index.html">↑ All steps</a>
+    <a class="next" href="index.html">Done! ↑ All steps →</a>
+  </nav>
+</div>
+<script src="sprite.js"></script>
+<script src="teacher/05-follow-a-route-done.js"></script>
+<script src="05-follow-a-route.js"></script>
+</body>
+</html>

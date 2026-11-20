@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprite Lab · 02 · Turn and Walk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,600&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sprite.css">
+</head>
+<body>
+<div class="page">
+  <p class="kick"><span class="star">★</span> Side C · The Sprite Lab · 02</p>
+  <h1>Turn, then <em>walk</em>.</h1>
+  <p class="lead">Just like the real game: you <strong>turn</strong> to change which way you
+    face, then walk <strong>forward</strong>. Turning doesn't move you to a new square — it
+    spins the character on the spot. Watch them turn!</p>
+
+  <div class="stage"></div>
+
+  <div class="lab">
+    <p class="caption">📎 Example — type this inside <code>walk()</code> in <code>02-turn-and-walk.js</code>:</p>
+    <pre class="code-view"></pre>
+    <div class="controls">
+      <button class="play">▶ Play mine</button>
+      <button class="stop">⏹ Reset</button>
+      <button class="finished">▶ Finished version</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>Your turn:</strong> type the three lines into <code>02-turn-and-walk.js</code>,
+      save, reload, <strong>▶ Play mine</strong>.</p>
+    <p><strong>What's happening:</strong> <code>turnRight()</code> and <code>turnLeft()</code>
+      only change your <em>facing</em> — you stay on the same square. Then <code>forward()</code>
+      walks whichever way you're now facing. Try <code>turnLeft()</code> instead and watch the
+      character head the other way across the field.</p>
+  </div>
+
+  <nav class="steps">
+    <a href="01-one-step.html">← Back</a>
+    <a href="index.html">↑ All steps</a>
+    <a class="next" href="03-walk-the-path.html">Next: walk the path →</a>
+  </nav>
+</div>
+<script src="sprite.js"></script>
+<script src="teacher/02-turn-and-walk-done.js"></script>
+<script src="02-turn-and-walk.js"></script>
+</body>
+</html>
